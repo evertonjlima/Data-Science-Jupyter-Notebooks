@@ -4,6 +4,7 @@ This repo is a collection of scripts and analysis related to [Kaggle's Digit Rec
 
 ### Exploring the data.
 
+The first 12 entries of the train dataset,
 
 ![img1](https://github.com/evertonjlima/Kaggle/blob/master/Digit-Recognizer/imgs/train1.png)
 ![img2](https://github.com/evertonjlima/Kaggle/blob/master/Digit-Recognizer/imgs/train2.png)
@@ -17,8 +18,5 @@ This repo is a collection of scripts and analysis related to [Kaggle's Digit Rec
 ![img10](https://github.com/evertonjlima/Kaggle/blob/master/Digit-Recognizer/imgs/train10.png)
 ![img11](https://github.com/evertonjlima/Kaggle/blob/master/Digit-Recognizer/imgs/train11.png)
 ![img12](https://github.com/evertonjlima/Kaggle/blob/master/Digit-Recognizer/imgs/train12.png)
-![img13](https://github.com/evertonjlima/Kaggle/blob/master/Digit-Recognizer/imgs/train13.png)
-![img14](https://github.com/evertonjlima/Kaggle/blob/master/Digit-Recognizer/imgs/train14.png)
-![img15](https://github.com/evertonjlima/Kaggle/blob/master/Digit-Recognizer/imgs/train15.png)
 
 
