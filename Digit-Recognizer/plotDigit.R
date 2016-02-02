@@ -16,11 +16,9 @@ plotDigit <- function( r ){
   
   if(!is.null(dim(r))){
     digit <- matrix(as.numeric(r[,-1]),28,28)
-    label <- r[,1]
   }
   else{
     digit <- matrix(r[-1],28,28)
-    label <- r[1]
   }
 
   # Plot
@@ -31,10 +29,10 @@ plotDigit <- function( r ){
 generatePlots <- function(m, range=15,s=T){
 
   for( e in 1:range){
+    png(paste("train",e,".png",sep = ""), width = 280, height = 280)
     plotDigit(m[e,])
     
     if(s){
-      dev.copy(png,paste("train",e,".png",sep = ""))
       dev.off()
     }
   }
