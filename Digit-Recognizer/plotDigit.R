@@ -29,7 +29,7 @@ plotDigit <- function( r ){
 generatePlots <- function(m, range=15,s=T){
 
   for( e in 1:range){
-    png(paste("train",e,".png",sep = ""), width = 280, height = 280)
+    png(paste("train",e,".png",sep = ""), width = 200, height = 200)
     plotDigit(m[e,])
     
     if(s){
