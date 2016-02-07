@@ -5,3 +5,6 @@ data/
 
 # Ignore RStudio
 *.Rhistory
+
+# Ignore Temporary files
+*.swp
