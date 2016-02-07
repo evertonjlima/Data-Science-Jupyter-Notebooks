@@ -38,9 +38,19 @@ From this images we can make some initial observations that may aid our classifi
 
 Thus, a selection of useful features can be made. The selection results in 709 features what do not have all values set to zero, with 76 features being removed from the data.
 
+### PCA
+
+![PCA](https://github.com/evertonjlima/Kaggle/blob/master/Digit-Recognizer/imgs/PCA.png)
+
 ## Feature Engineering
 
 ### Density by region
 
 ![Region Selection](https://github.com/evertonjlima/Kaggle/blob/master/Digit-Recognizer/imgs/RegionSelection.png)
+
+## Models
+
+### K Nearest
+
+### Random Forest
 

@@ -24,6 +24,7 @@ plotDigit <- function( r ){
   # Plot
   image(rotate(digit), col = palette(gray(seq(0, .2, len=32))),
         zlim = c(1,255) , axes = F, asp = 1, main = label) 
+  
 }
 
 generatePlots <- function(m, range=15,s=T){
