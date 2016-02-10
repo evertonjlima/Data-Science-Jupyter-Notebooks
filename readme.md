@@ -10,4 +10,6 @@ This repo is a collection of notebooks related to data science. See index sectio
 
 #### Mnist Dataset
 
+My attempt at solving the digit recognition problem. 
+
 [View Jupyter Notebook](https://nbviewer.jupyter.org/github/evertonjlima/Kaggle/blob/master/Digit-Recognizer/digit-recognizer.ipynb)
