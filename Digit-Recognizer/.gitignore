@@ -6,5 +6,9 @@ data/
 # Ignore RStudio
 *.Rhistory
 
+# Ignore Jupyter checkpoints
+*.ipynb_checkpoints
+
 # Ignore Temporary files
 *.swp
+

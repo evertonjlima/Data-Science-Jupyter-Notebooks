@@ -27,14 +27,20 @@ plotDigit <- function( r ){
   
 }
 
-generatePlots <- function(m, range=15,s=T){
+generatePlots <- function(m, range=12,s=F){
 
+  #dev.off()
+  #png(width = 1200,height=1200)
+  par(mfrow=c(3,4))
   for( e in 1:range){
-    png(paste("train",e,".png",sep = ""), width = 200, height = 200)
+    #dev.new(width=20, height=20,".png")
+    #options(repr.plot.width=8, repr.plot.height=3)
+    #png(width = 200,height = 200)
+    
     plotDigit(m[e,])
     
     if(s){
-      dev.off()
+      #dev.off()
     }
   }
   
