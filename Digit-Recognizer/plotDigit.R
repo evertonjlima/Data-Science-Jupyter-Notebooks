@@ -1,4 +1,4 @@
-plotDigit <- function( r ){
+plotDigit <- function( r, label="" ){
 # Plots an entry of the MNIST dataset.
 #
 # Args:
@@ -11,9 +11,6 @@ plotDigit <- function( r ){
   rotate <- function(x) t(apply(x, 1, rev))
   
   # Convert entry into a 28x28 matrix
-
-  label <- ""
-  
   if(!is.null(dim(r))){
     digit <- matrix(as.numeric(r[,-1]),28,28)
   }
@@ -27,7 +24,7 @@ plotDigit <- function( r ){
   
 }
 
-generatePlots <- function(m, range=12,s=F){
+generatePlots <- function(m, range=12,s=F, labels=c()){
 
   #dev.off()
   #png(width = 1200,height=1200)
@@ -36,8 +33,11 @@ generatePlots <- function(m, range=12,s=F){
     #dev.new(width=20, height=20,".png")
     #options(repr.plot.width=8, repr.plot.height=3)
     #png(width = 200,height = 200)
-    
-    plotDigit(m[e,])
+   
+		if(!is.null(labels)) l <- labels[e] 
+		else l <- ""
+
+    plotDigit(m[e,],label=l)
     
     if(s){
       #dev.off()
