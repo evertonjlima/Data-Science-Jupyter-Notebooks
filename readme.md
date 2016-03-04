@@ -4,12 +4,23 @@ This repo is a collection of notebooks related to data science. See index sectio
 
 ## Index
 * [Kaggle Challenges](#kaggle-challenges)
+* [Books](#Books)
+
+
+### Books
+
+#### ISLR
+| Conceptual Exercises  | Applied Exercises  |  
+|-----------------------|--------------------|
+| Link | Link            
+
+
 
 
 ### Kaggle Challenges
 
-#### Mnist Dataset
 
-My attempt at solving the digit recognition problem. 
+| Challenge          | Description                                          | Notebook  |
+|--------------------|------------------------------------------------------|-----------|
+| Digit Recognition  | My attempt at solving the digit recognition problem. |[View Jupyter Notebook](https://nbviewer.jupyter.org/github/evertonjlima/Kaggle/blob/master/Digit-Recognizer/digit-recognizer.ipynb) |
 
-[View Jupyter Notebook](https://nbviewer.jupyter.org/github/evertonjlima/Kaggle/blob/master/Digit-Recognizer/digit-recognizer.ipynb)

@@ -1,0 +1,80 @@
+\documentclass[11pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+	
+	\usepackage{amsmath}
+							% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+
+\title{ISL Conceptual Exercises Ch 3}
+\author{Everton Lima}
+%\date{}							% Activate to display a given date or no date
+
+\renewcommand{\thesubsection}{\thesection.\alph{subsection}}
+\begin{document}
+\maketitle
+
+\section{}
+
+Each p value in Table 3.4 corresponds to the probability of the respective coefficient being zero. The conclusion drawn is that given the effect of both TV and radio has on sales there is no evidence that newspaper is related to sales.
+
+\section{}
+
+Both KNN classifier and KNN regression use information about the neighborhood of data points to draw conclusions from, however each method has unique goals. In the case of KNN classifier we are interested in finding to which class a new data point belongs to, thus we assign it to the class of most frequent point class in the neighborhood of this point. One the other hand, in KNN regression our target is not a class label but rather a real number, so we assign a new point value to the mean of the points in the neighborhood.
+
+\section{}
+\subsection{}
+   \begin{math} 
+   \\ Female: 85+20\times GPA+0.07\times IQ+0.01\times GPA:IQ-10\times GPA 
+   \\ Male: 50+20\times GPA+0.07\times IQ+0.01\times GPA:IQ
+   \\
+   \end{math}
+
+When GPA is large Females will have a lower salary. The correct alternative is \textbf{iii}.
+   
+  \subsection{}
+$50+20\times4+0.07\times110+35+0.01\times4*110-10\times 4 = 137.1$
+
+  \subsection{}
+  This may not be the case. While the coefficient is small it may have a high t-statistic and thus small p-value implying that an interaction effect exists.
+
+
+\section{}
+
+  \subsection{}
+  I would expect the RSS to be lower when fitting cubic linear regression on the training set, since fitting polynomial coefficients would provide a tighter fit to the data.
+
+  \subsection{}
+  In the test set the RSS would tend to be higher for the cubic linear model. Since the true relationship is linear the reduction of bias is not offset by a reduction in variance thus RSS is larger for the cubic linear model.
+  
+    \subsection{}
+Since the cubic model is more flexible I would expect it to perform well on the training set.
+
+    \subsection{}
+There is not enough information in this case; Depending on how non-linear is the true relationship either model may perform better. In the case the true relationship is non-linear but closer to linear than cubic then the linear model will perform better. The opposite is true when the true relationship is closer to cubic than linear. 
+
+\section{}
+$a_i = x_i / (\sum x_i^2)$
+
+\section{}
+
+A linear model with one predictor is defined by $\hat{y} = \hat{\beta_0} + \hat{\beta_1} x$ and  if $(\bar{y},\bar{x})$ is a point on the line then $\bar{y} = \hat{\beta_0} + \hat{\beta_1} \bar{x}$ then $ \bar{y} - \hat{\beta_1} \bar{x}= \hat{\beta_0}$ which is true by the definition of $\hat{\beta_0}$ on equation 3.4.
+
+\end{document}  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
