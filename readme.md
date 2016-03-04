@@ -11,9 +11,9 @@ This repo is a collection of notebooks related to data science. See index sectio
 
 #### ISLR
 
-| Conceptual Exercises  | Applied Exercises  |  
-|-----------------------|--------------------|
-| [Chapter 3](https://github.com/evertonjlima/Data-Science-Jupyter-Notebooks/blob/master/ISLR/Exercises/ISL_ConceptExerCh3.pdf) | [Chapter 3](https://nbviewer.jupyter.org/github/evertonjlima/Data-Science-Jupyter-Notebooks/blob/master/ISLR/Exercises/Ch3-Applied-Exercises.ipynb) |
+|Chapter | Conceptual Exercises  | Applied Exercises  |  
+|--------|-----------------------|--------------------|
+|3       | [PDF](https://github.com/evertonjlima/Data-Science-Jupyter-Notebooks/blob/master/ISLR/Exercises/ISL_ConceptExerCh3.pdf) | [View Jupyter Notebook](https://nbviewer.jupyter.org/github/evertonjlima/Data-Science-Jupyter-Notebooks/blob/master/ISLR/Exercises/Ch3-Applied-Exercises.ipynb) |
 
 
 ### Kaggle Challenges
