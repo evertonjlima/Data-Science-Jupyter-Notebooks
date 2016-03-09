@@ -5,7 +5,7 @@ This repo is a collection of notebooks related to data science. See index sectio
 ## Index
 * [Kaggle Challenges](#kaggle-challenges)
 * [Exercises and Notes on Books](#Exercises-and-Notes-on-Books)
- * [Introduction to Statistical Learning](#Introduction-to-Statistical-Learning
+ * [Introduction to Statistical Learning](#Introduction-to-Statistical-Learning)
 
 
 ### Exercises and Notes on Books
