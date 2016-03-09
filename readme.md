@@ -9,7 +9,10 @@ This repo is a collection of notebooks related to data science. See index sectio
 
 ### Books
 
-#### ISLR
+#### Introduction to Statistical Learning (ISL) - Exercises Solutions
+
+Solutions to both conceptual and applied exercises of the [ISL](http://www-bcf.usc.edu/~gareth/ISL/index.html) book.
+
 
 |Chapter No. | Conceptual Exercises  | Applied Exercises  |  
 |------------|-----------------------|--------------------|
