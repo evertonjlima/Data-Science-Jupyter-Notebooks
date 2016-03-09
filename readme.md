@@ -4,14 +4,15 @@ This repo is a collection of notebooks related to data science. See index sectio
 
 ## Index
 * [Kaggle Challenges](#kaggle-challenges)
-* [Books](#Books)
+* [Exercises, and notes on Books](#Books)
+ * [Introduction to Statistical Learning](#ISL)
 
 
 ### Books
 
-#### Introduction to Statistical Learning (ISL) - Exercises Solutions
+#### ISL
 
-Solutions to both conceptual and applied exercises of the [ISL](http://www-bcf.usc.edu/~gareth/ISL/index.html) book.
+Solutions to both conceptual and applied exercises of the book [Introduction to Statistical Learning](http://www-bcf.usc.edu/~gareth/ISL/index.html) book.
 
 
 |Chapter No. | Conceptual Exercises  | Applied Exercises  |  
