@@ -1,6 +1,6 @@
 # Data Science Jupyter Notebooks
 
-This repo is a collection of notebooks related to data science. See index section for list of content.
+This repo is a collection of notebooks related to data science. See [index](#Index) section for list of content.
 
 ## Index
 * [Kaggle Challenges](#kaggle-challenges)
