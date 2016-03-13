@@ -19,7 +19,7 @@ plotDigit <- function( r, label="" ){
   }
 
   # Plot
-  image(rotate(digit), col = palette(gray(seq(0, .2, len=32))),
+  image(rotate(digit), col = ifelse(rotate(digit)<0,rainbow(12),palette(gray(seq(0, .2, len=32)))),
         zlim = c(1,255) , axes = F, asp = 1, main = label) 
   
 }

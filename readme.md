@@ -1,22 +1,24 @@
 # Data Science Jupyter Notebooks
 
-This repo is a collection of notebooks related to data science. See [index](#Index) section for list of content.
+This repo is a collection of jupyter notebooks related to data science. See [index](#index) section for list of content.
 
 ## Index
 * [Kaggle Challenges](#kaggle-challenges)
 * [Exercises and Notes on Books](#exercises-and-notes-on-books)
  * [Introduction to Statistical Learning](#introduction-to-statistical-learning)
+   * [Solutions](#Solutions)
 
 
 ### Exercises and Notes on Books
 #### Introduction to Statistical Learning
 
+#### Solutions
 Solutions to both conceptual and applied exercises of the [ISL](http://www-bcf.usc.edu/~gareth/ISL/index.html) book.
 
 
-|Chapter No. | Conceptual Exercises  | Applied Exercises  |  
-|------------|-----------------------|--------------------|
-|3           | [View PDF](https://github.com/evertonjlima/Data-Science-Jupyter-Notebooks/blob/master/ISLR/Exercises/ISL_ConceptExerCh3.pdf) | [View Jupyter Notebook](https://nbviewer.jupyter.org/github/evertonjlima/Data-Science-Jupyter-Notebooks/blob/master/ISLR/Exercises/Ch3-Applied-Exercises.ipynb) |
+|Chapter No. |                                                                                Exercises                                                                        |  
+|------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|3           | [View Jupyter Notebook](https://nbviewer.jupyter.org/github/evertonjlima/Data-Science-Jupyter-Notebooks/blob/master/ISLR/Exercises/Ch3-Applied-Exercises.ipynb) |
 
 
 ### Kaggle Challenges
@@ -24,5 +26,5 @@ Solutions to both conceptual and applied exercises of the [ISL](http://www-bcf.u
 
 | Challenge          | Description                                          | Notebook  |
 |--------------------|------------------------------------------------------|-----------|
-| Digit Recognition  | My attempt at solving the digit recognition problem. |[View Jupyter Notebook](https://nbviewer.jupyter.org/github/evertonjlima/Kaggle/blob/master/Digit-Recognizer/digit-recognizer.ipynb) |
+| Digit Recognition  | Feature Engineering, and KNN.       |[View Jupyter Notebook](https://nbviewer.jupyter.org/github/evertonjlima/Kaggle/blob/master/Digit-Recognizer/digit-recognizer.ipynb) |
 
