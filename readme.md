@@ -18,7 +18,8 @@ Solutions to both conceptual and applied exercises of the [ISL](http://www-bcf.u
 
 |Chapter No. |                                                                                Exercises                                                                        |  
 |------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|3           | [View Jupyter Notebook](https://nbviewer.jupyter.org/github/evertonjlima/Data-Science-Jupyter-Notebooks/blob/master/ISLR/Exercises/Ch3-Applied-Exercises.ipynb) |
+|3           | [View Jupyter Notebook](https://nbviewer.jupyter.org/github/evertonjlima/Data-Science-Jupyter-Notebooks/blob/master/ISLR/Exercises/Ch3-Exercises.ipynb)         |
+|4           | [View Jupyter Notebook](https://nbviewer.jupyter.org/github/evertonjlima/Data-Science-Jupyter-Notebooks/blob/master/ISLR/Exercises/Ch4-Exercises.ipynb)         | 
 
 
 ### Kaggle Challenges
