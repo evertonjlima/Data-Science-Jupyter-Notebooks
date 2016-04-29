@@ -3,13 +3,13 @@
 # Planning
 
 ## W18
-[] - Overview of Data
-[x] - Feature: Jaccard Distance.
-[x] - Simple Linear Regression Using 1 Feature.
-[] - Preprocessing Data
-[] - Feature: Tf-Itf
-[] - Feature: 
-[] - Course Lectures.
+- []  Overview of Data
+- [x]  Feature: Jaccard Distance.
+- [x]  Simple Linear Regression Using 1 Feature.
+- []  Preprocessing Data
+- []  Feature: Tf-Itf
+- []  Feature: 
+- []  Course Lectures.
 
 ## W19
 [] - 
