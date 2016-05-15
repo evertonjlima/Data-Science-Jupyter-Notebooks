@@ -5,22 +5,22 @@
 #
 # jaccard
 #
-#
-#
 
 jaccard <- function(x,y){
-  # jaccard
-  # Returns the jaccard coefficient as calculated by the size of the intersection, divided by the size
-  # of the union of two texts.
+  # jaccard(x,y)
+  #
+  #   Returns the jaccard coefficient as calculated by the size of the intersection, divided by the size
+  #   of the union of two texts.
   #
   # args:
-  #  x  character  text used for measuring.
-  #  y  character  as above, text used for measuring.
+  #   x  character  text used for measuring.
+  #   y  character  as above, text used for measuring.
   #
   # return
-  #  numeric  jaccard distance, value within [0,1].
+  #   numeric  jaccard distance, value within [0,1].
   # 
-  # example -  jaccard("Spam Spam Spam Spam","Bacon Spam")
+  # example
+  #   jaccard("Spam Spam Spam Spam","Bacon Spam")
   #
   
   str1 = unlist(strsplit(tolower(x),split = " "))
