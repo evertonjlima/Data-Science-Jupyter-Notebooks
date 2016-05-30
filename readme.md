@@ -16,10 +16,11 @@ This repo is a collection of jupyter notebooks related to data science. See [ind
 Solutions to both conceptual and applied exercises of the [ISL](http://www-bcf.usc.edu/~gareth/ISL/index.html) book.
 
 
-|Chapter No. |                                                                                Exercises                                                                        |  
-|------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|3           | [View Jupyter Notebook](https://nbviewer.jupyter.org/github/evertonjlima/Data-Science-Jupyter-Notebooks/blob/master/ISLR/Exercises/Ch3-Exercises.ipynb)         |
-|4           | [View Jupyter Notebook](https://nbviewer.jupyter.org/github/evertonjlima/Data-Science-Jupyter-Notebooks/blob/master/ISLR/Exercises/Ch4-Exercises.ipynb)         | 
+|Chapter No. |                                                                               Exercises                                            |  
+|------------|------------------------------------------------------------------------------------------------------------------------------------|
+|2           | [View Jupyter Notebook](https://nbviewer.jupyter.org/github/evertonjlima/Notebooks/blob/master/ISLR/Exercises/Ch2-Exercises.ipynb) |
+|3           | [View Jupyter Notebook](https://nbviewer.jupyter.org/github/evertonjlima/Notebooks/blob/master/ISLR/Exercises/Ch3-Exercises.ipynb) |
+|4           | [View Jupyter Notebook](https://nbviewer.jupyter.org/github/evertonjlima/Notebooks/blob/master/ISLR/Exercises/Ch4-Exercises.ipynb) | 
 
 
 ### Kaggle Challenges
