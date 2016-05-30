@@ -18,9 +18,9 @@ Solutions to both conceptual and applied exercises of the [ISL](http://www-bcf.u
 
 |Chapter No. |                                                                               Exercises                                            |  
 |------------|------------------------------------------------------------------------------------------------------------------------------------|
-|2           | [View Jupyter Notebook](https://github.com/evertonjlima/Notebooks/tree/master/ISLR/Exercises/Ch2-Exercises/Ch2-Exercises.md)       |
-|3           | [View Jupyter Notebook](https://nbviewer.jupyter.org/github/evertonjlima/Notebooks/blob/master/ISLR/Exercises/Ch3-Exercises.ipynb) |
-|4           | [View Jupyter Notebook](https://nbviewer.jupyter.org/github/evertonjlima/Notebooks/blob/master/ISLR/Exercises/Ch4-Exercises.ipynb) | 
+|2           | [View Jupyter Notebook](http://nbviewer.jupyter.org/github/evertonjlima/Notebooks/blob/master/ISLR/Exercises/Ch2-Exercises.ipynb)       |
+|3           | [View Jupyter Notebook](http://nbviewer.jupyter.org/github/evertonjlima/Notebooks/blob/master/ISLR/Exercises/Ch3-Exercises.ipynb) |
+|4           | [View Jupyter Notebook](http://nbviewer.jupyter.org/github/evertonjlima/Notebooks/blob/master/ISLR/Exercises/Ch4-Exercises.ipynb) | 
 
 
 ### Kaggle Challenges
