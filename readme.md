@@ -9,10 +9,10 @@ This repo is a collection of jupyter notebooks related to data science. See [ind
    * [Solutions](#Solutions)
 
 
-### Exercises and Notes on Books
-#### Introduction to Statistical Learning
+## Exercises and Notes on Books
+### Introduction to Statistical Learning
 
-#### Solutions
+### Solutions
 Solutions to both conceptual and applied exercises of the [ISL](http://www-bcf.usc.edu/~gareth/ISL/index.html) book. 
 
 |Chapter No. |                                                                               Exercises                                            |  
@@ -22,7 +22,7 @@ Solutions to both conceptual and applied exercises of the [ISL](http://www-bcf.u
 |4           | [View Jupyter Notebook](http://nbviewer.jupyter.org/github/evertonjlima/Notebooks/blob/master/ISLR/Exercises/Ch4-Exercises.ipynb) | 
 
 
-### Kaggle Challenges
+## Kaggle Challenges
 
 
 | Challenge          | Description                                          | Notebook  |
