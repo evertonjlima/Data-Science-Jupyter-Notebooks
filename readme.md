@@ -1,6 +1,6 @@
 # Data Science Jupyter Notebooks
 
-This repo is a collection of jupyter notebooks related to data science. See [index](#index) section for list of content.
+This repo is a collection of jupyter notebooks related to data science. See [index](#index) section for list of content. For best results please view the jupyter notebooks in your local machine.
 
 ## Index
 * [Kaggle Challenges](#kaggle-challenges)
@@ -13,8 +13,7 @@ This repo is a collection of jupyter notebooks related to data science. See [ind
 #### Introduction to Statistical Learning
 
 #### Solutions
-Solutions to both conceptual and applied exercises of the [ISL](http://www-bcf.usc.edu/~gareth/ISL/index.html) book.
-
+Solutions to both conceptual and applied exercises of the [ISL](http://www-bcf.usc.edu/~gareth/ISL/index.html) book. 
 
 |Chapter No. |                                                                               Exercises                                            |  
 |------------|------------------------------------------------------------------------------------------------------------------------------------|
