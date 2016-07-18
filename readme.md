@@ -1,6 +1,6 @@
 # Data Science Jupyter Notebooks
 
-This repo is a collection of jupyter notebooks related to data science. See [index](#index) section for list of content. For best results please view the jupyter notebooks in your local machine.
+This repo is a collection of jupyter notebooks related to data science. See [index](#index) section for list of content. 
 
 ## Index
 * [Kaggle Challenges](#kaggle-challenges)
@@ -17,9 +17,9 @@ Solutions to both conceptual and applied exercises of the [ISL](http://www-bcf.u
 
 |Chapter No. |                                                                               Exercises                                            |  
 |------------|------------------------------------------------------------------------------------------------------------------------------------|
-|2           | [View Jupyter Notebook](http://rpubs.com/evertonjlima/191155)       |
-|3           | [View Jupyter Notebook](http://nbviewer.jupyter.org/github/evertonjlima/Notebooks/blob/master/ISLR/Exercises/Ch3-Exercises.ipynb) |
-|4           | [View Jupyter Notebook](http://nbviewer.jupyter.org/github/evertonjlima/Notebooks/blob/master/ISLR/Exercises/Ch4-Exercises.ipynb) | 
+|2           | [View Document](http://rpubs.com/evertonjlima/191155)       |
+|3           | [View Document](http://nbviewer.jupyter.org/github/evertonjlima/Notebooks/blob/master/ISLR/Exercises/Ch3-Exercises.ipynb) |
+|4           | [View Document](http://nbviewer.jupyter.org/github/evertonjlima/Notebooks/blob/master/ISLR/Exercises/Ch4-Exercises.ipynb) | 
 
 
 ## Kaggle Challenges
