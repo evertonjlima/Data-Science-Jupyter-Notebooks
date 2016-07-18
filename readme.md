@@ -17,8 +17,8 @@ Solutions to both conceptual and applied exercises of the [ISL](http://www-bcf.u
 
 |Chapter No. |                                                                               Exercises                                            |  
 |------------|------------------------------------------------------------------------------------------------------------------------------------|
-|2           | [View Document](http://rpubs.com/evertonjlima/191155)       |
-|3           | [View Document](http://nbviewer.jupyter.org/github/evertonjlima/Notebooks/blob/master/ISLR/Exercises/Ch3-Exercises.ipynb) |
+|2           | [View Document](http://rpubs.com/evertonjlima/191170)       |
+|3           | [View Document](http://rpubs.com/evertonjlima/191172) |
 |4           | [View Document](http://nbviewer.jupyter.org/github/evertonjlima/Notebooks/blob/master/ISLR/Exercises/Ch4-Exercises.ipynb) | 
 
 
