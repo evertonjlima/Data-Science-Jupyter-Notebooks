@@ -17,10 +17,10 @@ Solutions to both conceptual and applied exercises of the [ISL](http://www-bcf.u
 
 |Chapter No. |                                                                               Exercises                                            |  
 |------------|------------------------------------------------------------------------------------------------------------------------------------|
-|2           | [View Document](http://rpubs.com/evertonjlima/191170)       |
+|2           | [View Document](http://rpubs.com/evertonjlima/191170) |
 |3           | [View Document](http://rpubs.com/evertonjlima/191172) |
 |4           | [View Document](http://rpubs.com/evertonjlima/218866) | 
-
+|5           | [View Document](http://rpubs.com/evertonjlima/224488) |    
 
 ## Kaggle Challenges
 

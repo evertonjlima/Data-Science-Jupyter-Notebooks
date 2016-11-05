@@ -1,0 +1,596 @@
+---
+output: html_document
+---
+Notebook prepared by [Everton Lima](https://github.com/evertonjlima)
+
+# Introduction to Statistical Learning Exercise Solutions Chapter 4
+## Table of Contents
+
+### Conceptual Exercises
+- [1](#1)
+- [2](#2)
+- [3](#3)
+- [4](#4)
+- [5](#5)
+- [6](#6)
+- [7](#7)
+- [8](#8)
+- [9](#9)
+
+### Applied Exercises
+- [10](#10)
+- [11](#11)
+- [12](#12)
+- [13](#13)
+
+## Conceptual Exercises
+
+### 1<a name="1"></a>
+
+$p(x) = \frac{e^{\beta_0+\beta_1x}}{1+e^{\beta_0+\beta_1x}}$ (4.2)
+  
+$\frac{p(x)}{1-p(x)} = e^{\beta_0+\beta_1x}$ (4.3)
+
+
+The equations are equivalent since,
+
+$1-p(x) = 1-\frac{e^{\beta_0+\beta_1x}}{1+\beta_0+\beta_1x} = \frac{1+e^{\beta_0+\beta_1x}-e^{\beta_0+\beta_1x}}{1+e^{\beta_0+\beta_1x}} = \frac{1}{1+e^{\beta_0+\beta_1x}}$ 
+
+$\frac{1}{1-p(x)} = 1+e^{\beta_0+\beta_1x}$ (1)
+
+and substituting 1 into 4.2 yields 4.3,
+
+$\frac{p(x)}{1-p(x)} = \frac{e^{\beta_0+\beta_1x}}{1+e^{\beta_0+\beta_1x}}(1+e^{\beta_0+\beta_1x})=e^{\beta_0+\beta_1x}$
+
+### 2<a name="2"></a>
+
+$p_k(x) = \frac{\pi_k\frac{1}{\sqrt{2\pi\sigma}}exp(-\frac{1}{2\sigma^2_k}(x-\mu_k)^2) }{\sum^K_{l=1} \pi_l\frac{1}{\sqrt{2\pi\sigma}}exp(-\frac{1}{2\sigma^2_k}(x-\mu_l)^2)}$                              (4.12)
+   
+$\sigma_k=x\cdot\frac{\mu_k}{\sigma^2} -\frac{\mu_k^2}{2\sigma^2} + log(\pi_k)$      (4.13)
+
+
+$log(p_k(x)) = log(\frac{\pi_k\frac{1}{\sqrt{2\pi\sigma}}exp(-\frac{1}{2\sigma^2_k}(x-\mu_k)^2) }{\sum^K_{l=1} \pi_l\frac{1}{\sqrt{2\pi\sigma}}exp(-\frac{1}{2\sigma^2_k}(x-\mu_l)^2)})=log(\pi_k\frac{1}{\sqrt{2\pi\sigma}}exp(-\frac{1}{2\sigma^2_k}(x-\mu_k)^2) ) - log(\sum^K_{l=1} \pi_l\frac{1}{\sqrt{2\pi\sigma}}exp(-\frac{1}{2\sigma^2_k}(x-\mu_l)^2))$ (Eq. 1)
+
+Let $K = log(\sum^K_{l=1} \pi_l\frac{1}{\sqrt{2\pi\sigma}}exp(-\frac{1}{2\sigma^2_k}(x-\mu_l)^2))$ then Eq. 1 becomes $log(p_k(x)) = log(\pi_k\frac{1}{\sqrt{2\pi\sigma}}exp(-\frac{1}{2\sigma^2_k}(x-\mu_k)^2) ) - K$
+
+Further simplifications can be made,
+ 
+$log(p_k(x)) = log(\pi_k)+log(\frac{1}{\sqrt{2\pi\sigma}})+log(exp(-\frac{1}{2\sigma^2_k}(x-\mu_k)^2)) - K 
+= -\frac{1}{2\sigma^2}(x-\mu_k)^2 + log(\pi_k)+log(\frac{1}{\sqrt{2\pi\sigma}})-K$
+
+$= -\frac{1}{2\sigma^2}(x^2-2x\mu_k+\mu_k^2) + log(\pi_k)+log(\frac{1}{\sqrt{2\pi\sigma}})-K$
+
+$= x\cdot\frac{\mu_k}{\sigma^2}+\frac{\mu_k^2}{2\sigma^2} + log(\pi_k)-\frac{x^2}{2\sigma^2}+log(\frac{1}{\sqrt{2\pi\sigma}})-K$
+
+Where since the Bayes classifier assigns an observation to the class which $p_k(x)$ is maximized, it assignts to class j if $p_j(x) > p_i(x)$ for all $i\neq j$. 
+
+$p_j(x) > p_i(x) = log(p_j(x)) > log(p_i(x))$ for all $i\neq j$
+
+
+$x\cdot\frac{\mu_j}{\sigma^2}+\frac{\mu_j^2}{2\sigma^2} + log(\pi_j)-\frac{x^2}{2\sigma^2}+log(\frac{1}{\sqrt{2\pi\sigma}})-K > x\cdot\frac{\mu_i}{\sigma^2}+\frac{\mu_i^2}{2\sigma^2} + log(\pi_i)-\frac{x^2}{2\sigma^2}+log(\frac{1}{\sqrt{2\pi\sigma}})-K$
+
+$x\cdot\frac{\mu_j}{\sigma^2}+\frac{\mu_j^2}{2\sigma^2} + log(\pi_j)> x\cdot\frac{\mu_i}{\sigma^2}+\frac{\mu_i^2}{2\sigma^2} + log(\pi_i)$ for all $i\neq j$ since $\sigma_1 = \sigma_2 = ... = \sigma_n$
+
+Thus the Bayes classifier assigns an obsevation to the discriminant function which is maximized.
+
+$\sigma_k  = x\cdot\frac{\mu_k}{\sigma^2} -\frac{\mu_k^2}{2\sigma^2} + log(\pi_k)$
+
+### 3<a name="3"></a>
+
+In the previous problem the quadradic term $\frac{x^2}{2\sigma^2}$ can be eliminated since LDA assumes $\sigma = \sigma_1 = \sigma_2 = ... = \sigma_n$. On the other hand, QDA makes no such assumption.
+
+Following the steps in the previous question yields
+
+$x\cdot\frac{\mu_j}{\sigma^2}+\frac{\mu_j^2}{2\sigma^2} + log(\pi_j)-\frac{x^2}{2\sigma^2}+log(\frac{1}{\sqrt{2\pi\sigma}})-K > x\cdot\frac{\mu_i}{\sigma^2}+\frac{\mu_i^2}{2\sigma^2} + log(\pi_i)-\frac{x^2}{2\sigma^2}+log(\frac{1}{\sqrt{2\pi\sigma}})-K$
+
+where if no assumption regarding $\sigma$ is made then an observation is assigned to the class for which the following is true,
+
+$x\cdot\frac{\mu_j}{\sigma^2}+\frac{\mu_j^2}{2\sigma_j^2} + log(\pi_j)-\frac{x^2}{2\sigma_j^2}+log(\frac{1}{\sqrt{2\pi\sigma_j}})> x\cdot\frac{\mu_i}{\sigma_i^2}+\frac{\mu_i^2}{2\sigma_i^2} + log(\pi_i)-\frac{x^2}{2\sigma_i^2}+log(\frac{1}{\sqrt{2\pi\sigma_i}})$ for all $j \neq i$
+
+### 4<a name="4"></a>
+
+#### 4a
+
+If X is an uniformly distributed random variable on [0,1], then $P( X \leq x) = F(x) = x$ where $0 \leq x \leq 1$. Thus, for any observation $x_i$ on [0,1] the probability that a value is on the interval [x_1-.05,x_1+.05] is 10% since $P( X \leq x) = \int_{x_i-.05}^{x_i+.05}f(x)dx =F(x_1-.05)-F(x_1+.05) = (x_i+.05)-(x_i-.05) = .1$ or 10%
+
+
+Assuming that $x \in [0.05,0.95]$.
+
+#### 4b
+
+Similarly to the previous problem, If $X_1$, and $X_2$ are uniformly distributed random variables then there is a 10% chance of any observation being in the 10% neighborhood of either $X_1$, or $X_2$. 
+
+Assuming that $X_1$ and $X_2$ are independent and let $x \in X_1$ and $y \in X_2$, and $A := [x-.05,x+0.05]$, $B := [y-0.05,y+0.05]$ so that A and B are neighborhood of $X_1$, and $X_2$ respectively. Then $p(x \in A, y \in B) = P(x \in A)P(y \in B) = 0.01$ or 1%
+
+Thus, on average only 1% of observations are within the 10% neighborhood of both cases. 
+
+#### 4c
+
+$0.1^{100}$
+
+#### 4d
+
+From the previous question one can note that if all features are independent, and uniformly distributed on [0,1] then with each new feature the amount of neighbors close to an observation decreases. In practice this means that KNN may use neighbors that are very far from a particular observation, yielding very poor results.
+
+#### 4e
+
+Hyper cube
+
+### 5<a name="5"></a>
+
+#### 5a
+On the training set QDA will perform better than LDA due to a decrease in bias. On the other hand, if Bayes decision boundary is linear then LDA will perform better on the test data set.
+
+#### 5b
+Expect QDA to perform better in both cases.
+
+#### 5c
+As the sample size increases it is expected that the prediction accuracy of QDA relative to LDA will improve. In general, this will be the case with non-linear methods relative to linear methods since with a increase in sample size there will be an decrease in bias that comes from a non-linear method, but variance will also tend to decrease as n increases.
+
+#### 5d
+False. 
+
+For small values of n, QDA will tend to model noise and thus the test error will be higher in this case.
+
+### 6<a name="6"></a>
+
+#### 6a
+$p(x) = \frac{exp(\hat{\beta_0}+\hat{\beta_1}x_1+\hat{\beta_2}x_2)  }{1+exp(\hat{\beta_0}+\hat{\beta_1}x_1+\hat{\beta_2}x_2)}=\frac{exp(-6+0.05\cdot x_1+x_2)}{1+exp(-6+0.05\cdot x_1+x_2)}\approx .3775$ or about 37.75%
+
+#### 6b
+Let $\hat{Y} = \hat{\beta_0}+\hat{\beta_1} x_1+\hat{\beta_2} x_2 = -6+0.05x_1+3.5$, then the logistic regression function can be expressed as $p1(x) = \frac{ e^{ \hat{Y}} }{ 1 + e^{ \hat{Y}} }$ where if the probability the students gets an A in the class is .5 then, $p2(x)=\frac{ e^{ \hat{Y}} }{ 1+e^{ \hat{Y}}  } = .5$
+
+so,
+
+$e^{\hat{Y}} = .5(1+e^{\hat{Y}}) = .5+.5e^{\hat{Y}}$
+
+$e^{\hat{Y}} - .5e^{\hat{Y}}= .5$
+
+$e^{\hat{Y}}(1 - .5)= .5$
+
+$.5e^{\hat{Y}}= .5$
+
+$log(.5)+\hat{Y} = log(.5)$
+
+$\hat{Y} = -6+0.05x_1+3.5 =  0$
+
+$x_1 = 50$
+
+### 7<a name="7"></a>
+
+The normal density function is $f(x) = \frac{1}{\sqrt{2\pi\sigma}}exp(-\frac{1}{\sqrt{2\pi\sigma^2}}(x-\mu_k)^2)$,
+
+where for k=0, $f(4) = \frac{1}{\sqrt{2\pi6}}exp(-\frac{1}{2(6)^2}(4-0)^2) \approx 0.05568$ and k=1, $f(4) = \frac{1}{\sqrt{2\pi6}}exp(-\frac{1}{2(6)^2}(4-10)^2) \approx 0.0403$ then plugging into Bayes formula gives the probability 0.751.
+
+### 8<a name="8"></a>
+
+For the case that K = 1, KNN will give a classification error of 0% for training data, since the closest point is itself. Since the average error is 18%, then the error on the test set is 36%, which is 6% higher than the test error obtained by logistic regression. This indicates that logistic regression is a better approach.
+
+### 9<a name="9"></a>
+#### 9a
+Since the odds is $\frac{p(x)}{1-p(x)} = 0.37$
+
+Then $p(x) = 0.37*(1-p(x))$
+$p(x)+0.37p(x)=0.37$
+$p(x) = \frac{0.37}{1.37} \approx 0.27$ or 27%
+
+#### 9b
+
+$p(x) = 0.16$ then $1 - p(x) = 0.84$
+
+Thus,
+
+$\frac{p(x)}{1-p(x)} = \frac{0.16}{0.84} \approx 0.19$
+
+## Applied Exercises
+
+### 10<a name="10"></a>
+
+```{r}
+library("ISLR")
+```
+
+#### 10a
+
+As before, there is one nominal feature, the Direction, with all other features being numerical. 
+
+Moreover, the scatter plot of the Weekly data indicates all the Lag variables are weakly correlated to each other. From the scatter plot, it can also be noted that the volumes of shares traded is rapidly increasing, in a yearly basis.
+
+```{r}
+summary(Weekly)
+```
+
+```{r}
+plot(Weekly)
+```
+
+As previously observed, the Lag variables are weakly correlated and there is a strong correlation between Year and Volume.
+
+```{r}
+cor(Weekly[,-9])
+```
+
+About 44% of the data is classified as Down, and 55% is classified as Up. 
+
+```{r}
+table(Weekly$Direction)/sum(table(Weekly$Direction))
+```
+
+It is important to note that Directional is simply a nominal form of the Today feature. This should be the case since Today gives the percentage increase, or decrease of the current week, and the variable Direction simply maps these values to 'Up', and 'Down' respectively.
+
+```{r}
+head(Weekly[,c(8,9)])
+```
+
+#### 10b
+
+As can be seen below, the only statistically significant variables (at a 5% confidence value) are Lag1, and Lag2.
+
+```{r}
+glm.fit <- glm(Direction~.-Year-Today,data=Weekly,family="binomial")
+summary(glm.fit)
+```
+
+#### 10c
+
+From the table below it can be observed that the algorithm classifies about 56% of the observations correctly. It also performs well on the days that the stock increases, since about 92% of 'Up' entries are correctly classified. However, it performs poorly on days the market is down, with about 11% of these cases classified correctly.
+
+```{r}
+glm.probs <- predict(glm.fit,type = "response")
+glm.pred <- rep("Down",nrow(Weekly))
+glm.pred[glm.probs>0.5] = "Up"
+
+table(glm.pred,Weekly$Direction)
+```
+
+```{r}
+mean(glm.pred == Weekly$Direction)
+558/(558+47)
+56/(428+56)
+```
+
+#### 10d
+
+```{r}
+train <- Weekly[,"Year"] <= 2008
+
+glm.fit <- glm(Direction~Lag2,data = Weekly,subset = train, family = "binomial")
+summary(glm.fit)
+```
+
+```{r}
+glm.probs <- predict(glm.fit,Weekly[!train,],type = "response")
+
+glm.pred <- rep("Down",nrow(Weekly))
+glm.pred[glm.probs>0.5] = "Up"
+
+table(glm.pred,Weekly[,"Direction"]) # Confusion Matrix.
+mean(glm.pred == Weekly[,"Direction"]) # Fraction of correct predictions.
+```
+
+#### 10e
+
+```{r}
+library(MASS)
+
+lda.fit <- lda(Direction~Lag2,data=Weekly,subset=train)
+lda.fit
+
+lda.pred <- predict(lda.fit,Weekly[!train,])
+lda.class <- lda.pred$class
+
+table(lda.class,Weekly[!train,9])
+mean(lda.class == Weekly[!train,9])
+```
+
+#### 10f
+
+```{r}
+qda.fit <- qda(Direction~Lag2,data=Weekly,subset=train)
+qda.fit
+
+qda.pred <- predict(qda.fit,Weekly[!train,])
+qda.class <- qda.pred$class
+
+table(qda.class,Weekly[!train,9])
+mean(qda.class == Weekly[!train,9])
+```
+
+#### 10g
+
+```{r}
+library(class)
+
+train.X <- cbind(Weekly[train,3])
+test.X <- cbind(Weekly[!train,3])
+
+train.Direction <- Weekly[train,c(9)]
+test.Direction <- Weekly[!train,c(9)]
+
+knn.pred <- knn(train.X,test.X,train.Direction,k=1)
+
+table(knn.pred,test.Direction)
+mean(knn.pred == test.Direction)
+```
+
+#### 10h
+
+The best performing model is LDA, since it has the highest prediction accuracy (about 68%).
+
+#### 10i
+
+```{r}
+# Logistic Regression
+
+# Increase in assignment probability
+glm.fit <- glm(Direction~Lag2,data = Weekly,subset = train, family = "binomial")
+summary(glm.fit)
+
+glm.probs <- predict(glm.fit,Weekly[!train,],type = "response")
+
+glm.pred <- rep("Down",nrow(Weekly))
+glm.pred[glm.probs>0.55] = "Up"
+
+table(glm.pred,Weekly[,"Direction"]) # Confusion Matrix.
+mean(glm.pred == Weekly[,"Direction"]) # Fraction of correct predictions.
+```
+
+```{r}
+# Non Linear Transformation
+
+# Up to Cubic power
+glm.fit <- glm(Direction~Lag2+I(Lag2^2)+I(Lag2^3),data = Weekly,subset = train, family = "binomial")
+summary(glm.fit)
+
+glm.probs <- predict(glm.fit,Weekly[!train,],type = "response")
+
+glm.pred <- rep("Down",nrow(Weekly))
+glm.pred[glm.probs>0.5] = "Up"
+
+table(glm.pred,Weekly[,"Direction"]) # Confusion Matrix.
+mean(glm.pred == Weekly[,"Direction"]) # Fraction of correct predictions.
+```
+
+```{r}
+# Square Root
+glm.fit <- glm(Direction~sqrt(abs(Lag2)),data = Weekly,subset = train, family = "binomial")
+summary(glm.fit)
+
+glm.probs <- predict(glm.fit,Weekly[!train,],type = "response")
+
+glm.pred <- rep("Down",nrow(Weekly))
+glm.pred[glm.probs>0.5] = "Up"
+
+table(glm.pred,Weekly[,"Direction"]) # Confusion Matrix.
+mean(glm.pred == Weekly[,"Direction"]) # Fraction of correct predictions.
+```
+
+```{r}
+# Log
+glm.fit <- glm(Direction~log10(abs(Lag2)),data = Weekly,subset = train, family = "binomial")
+summary(glm.fit)
+
+glm.probs <- predict(glm.fit,Weekly[!train,],type = "response")
+
+glm.pred <- rep("Down",nrow(Weekly))
+glm.pred[glm.probs>0.5] = "Up"
+
+table(glm.pred,Weekly[,"Direction"]) # Confusion Matrix.
+mean(glm.pred == Weekly[,"Direction"]) # Fraction of correct predictions.
+```
+
+```{r}
+train.X <- cbind(Weekly[train,3])
+test.X <- cbind(Weekly[!train,3])
+
+train.Direction <- Weekly[train,c(9)]
+test.Direction <- Weekly[!train,c(9)]
+
+
+errors <- c()
+
+maxK <- 100
+step <- 2
+
+for(j in seq(1,maxK,step)){
+  knn.pred <- knn(train.X,test.X,train.Direction,k=j)
+  table(knn.pred,test.Direction)
+  errors <- c(1-mean(knn.pred == test.Direction),errors)
+}
+
+data <- cbind(seq(1,maxK,step),errors)
+plot(data,type="l",xlab="k")
+
+knn.pred <- knn(train.X,test.X,train.Direction,k=which.min(errors))
+table(knn.pred,test.Direction)
+mean(knn.pred == test.Direction)
+```
+
+### 11<a name="11"></a>
+
+#### 11a
+
+```{r}
+mpg01 <- rep(0,nrow(Auto))
+mpg01[Auto[,'mpg']>median(Auto[,'mpg'])] <- 1
+
+mpg01 = as.factor(mpg01)
+Data = data.frame(Auto,mpg01)
+
+
+table(mpg01)
+```
+
+#### 11b
+
+Horsepower,weight and displacement seem useful in predicting mpg01.
+
+```{r}
+par(mfrow = c(2,2))
+boxplot(acceleration~mpg01,Data,main="Accel~mpg01")
+boxplot(weight~mpg01,Data,main="Weight~mpg01")
+boxplot(horsepower~mpg01,Data,main="Horsep~mpg01")
+boxplot(displacement~mpg01,Data,main="Disp~mpg01")
+```
+
+#### 11c
+
+```{r}
+Data.train = Data[1:196,]
+Data.test = Data[196:392,]
+```
+
+#### 11d
+
+Using the LDA model with the predictors horsepower, and displacement yields a miss classification error of 8.1%. Adding remaining predictors does not provide a significant improvement.
+
+```{r}
+lda.fit = lda(mpg01~weight+displacement,Data)
+lda.fit
+```
+
+```{r}
+lda.pred = predict(lda.fit, Data.test[,c('horsepower','weight','displacement')] )
+table(lda.pred$class,Data.test[,'mpg01'])
+mean(lda.pred$class != Data.test[,'mpg01'])
+```
+
+#### 11e
+
+The test error is slightly higher in this case. 10% of the test data is misclassified.
+
+```{r}
+qda.fit = qda(mpg01~horsepower+displacement,Data)
+qda.fit
+```
+
+```{r}
+qda.pred = predict(qda.fit, Data.test[,c('horsepower','weight','displacement')] )
+table(qda.pred$class,Data.test[,'mpg01'])
+mean(qda.pred$class != Data.test[,'mpg01'])
+```
+
+#### 11f
+
+Logistic regression is the worst model so far, with 18% of the observations being misclassified. However, lowering the minimum probability threshold improves the model.
+
+```{r}
+logit.fit = glm(mpg01~horsepower+displacement,family = binomial,Data.train)
+summary(logit.fit)
+```
+
+```{r}
+logit.pred = predict(logit.fit,Data.test[,c('horsepower','weight','displacement')])
+
+# min P = 0.5
+logit.class = ifelse(logit.pred>0.5,1,0)
+
+table(logit.class,Data.test[,'mpg01'])
+mean(logit.class != Data.test[,'mpg01'])
+
+# min P = 0.25
+logit.class = ifelse(logit.pred>0.25,1,0)
+
+table(logit.class,Data.test[,'mpg01'])
+mean(logit.class != Data.test[,'mpg01'])
+```
+
+#### 11g
+
+The test error lies between 0.13~0.18. The best value of K obtained is 5. However, due to ties occurring when predicting value there is some variation in the model (since in this cases KNN chooses the class randomly).
+
+```{r}
+library('class')
+knn.preds = sapply(1:20,function(x){
+    pred = knn(Data.train[,c('horsepower','weight','displacement')],
+               Data.test[,c('horsepower','weight','displacement')], 
+                cl = Data.train[,'mpg01'],k=x,l=x/2)
+    mean(pred != Data.test[,'mpg01'])
+})
+
+
+plot(1/(1:20),knn.preds,type = 'l',xlab='1/K')
+
+summary(knn.preds)
+which.min(knn.preds)
+```
+
+#### 12<a name="12"></a>
+#### 12a
+
+```{r}
+Power = function(){2^3}
+Power()
+```
+
+#### 12b
+
+```{r}
+Power2 = function(x,a){x^a}
+Power2(3,8)
+```
+
+#### 12c
+
+```{r}
+Power2(10,3)
+Power2(8,17)
+Power2(131,3)
+```
+
+#### 12d
+
+```{r}
+Power3 = function(x,a){ result=x^a; return(result)}
+```
+
+#### 12e
+
+```{r}
+x = 1:10
+y = sapply(x,function(x){Power3(x,3)})
+
+plot(x,y,log='x',main='x ~ x^2',type='l')
+```
+
+#### 12f
+
+```{r}
+PlotPower = function(x,a){
+  y = sapply(x,function(x){x^a})
+  plot(x,y,main=paste('x~x^',a,sep = ''),type='l')
+}
+```
+
+```{r}
+PlotPower(1:10,3)
+```
+
+#### 13<a name="13"></a>
+
+```{r}
+library('MASS')
+```
+
+```{r}
+mcrim = median(Boston[,'crim'])
+mcrim01 = ifelse(Boston[,'crim']>mcrim,1,0)  # create label, 1 is above the meadian and 0 otherwise.
+
+table(mcrim01)
+```
+
+```{r}
+Data = cbind(Boston,mcrim01)
+```
+
+```{r}
+par(mfrow = c(2,2))
+boxplot(medv~mcrim01,Data,main='medv~mcrim01')
+boxplot(lstat~mcrim01,Data,main='lstat~mcrim01')
+boxplot(dis~mcrim01,Data,main='dis~mcrim01')
+boxplot(age~mcrim01,Data,main='age~mcrim01')
+```
+
+From the plots above we can read the following; While there is a great variation, the median value of homes in a town is associated with higher crime. The a higher percentage of a lower status population is positively associated with a crime rate. The same can be said about the proportion of homes built before 1940. 
+
+Interestingly enough, the weighted mean of distance to employment centers has a strong negative correlation with crime.

@@ -1,0 +1,711 @@
+This notebook was prepared by [Everton Lima](https://github.com/evertonjlima).
+
+# Introduction to Statistical Leaning (ISL)
+## Ch 3 Applied Exercises 
+
+## Table of contents
+
+### Conceptual Exercises
+- [1](#1)
+- [2](#2)
+- [3](#3)
+- [4](#4)
+- [5](#5)
+- [6](#6)
+- [7](#7)
+
+### Applied Exercises
+- [8](#8)
+- [9](#9)
+- [10](#10)
+- [11](#11)
+- [12](#12)
+- [13](#13)
+- [14](#14)
+- [15](#15)
+
+
+### 1<a name="1"></a>
+
+The null hypothesis is $H_{0}: \beta = 0$ given the other variables in the model, or simply that for any coefficient $\beta$ there isn't a relationship between $\beta$ and the target variable. 
+
+Furthermore, each p-value in Table 3.4 corresponds to the probability of the respective coefficient being zero. The conclusion drawn is that given the effect of both TV and radio has on sales there is no evidence that newspaper is related to sales.
+
+### 2<a name="2"></a>
+
+Both KNN classifier and KNN regression use information about the neighborhood of data points to draw conclusions, however, each method has unique goals. In the case of KNN classifier we are interested in finding to which class a new data point belongs to, thus we assign it to the class of most frequent point class in the neighborhood of this point. One the other hand, in KNN regression our target is not a class label but rather a real number, so we assign a new point value to the mean of the points in the neighborhood.
+
+### 3<a name="3"></a>
+
+#### 3a
+$Female: 85+20\times GPA+0.07\times IQ+0.01\times GPA:IQ-10\times GPA$ 
+  
+$Male: 50+20\times GPA+0.07\times IQ+0.01\times GPA:IQ$
+
+When GPA is above 3.5 Females will have a lower salary. The correct alternative is \textbf{iii}.
+
+#### 3b
+$50+20\times4+0.07\times110+35+0.01\times4*110-10\times 4 = 137.1$
+
+#### 3c
+This may not be the case. While the coefficient is small it may have a high t-statistic and thus small p-value implying that an interaction effect exists.
+
+### 4<a name="4"></a>
+#### 4a
+I would expect the RSS to be lower when fitting cubic linear regression on the training set, since fitting polynomial coefficients would provide a tighter fit to the data.
+
+#### 4b
+In the test set the RSS would tend to be higher for the cubic linear model. Since the true relationship is linear the reduction of bias is not offset by a reduction in variance. Thus I expect the RSS to be larger for the cubic linear model.
+
+#### 4c
+Since the cubic model is more flexible I would expect it to perform well on the training set.
+
+#### 4d
+There is not enough information in this case; Depending on how non-linear is the true relationship either model may perform better. In the case that the true relationship is non-linear, but closer to linear than cubic then the linear model will perform better. The opposite is true when the true relationship is closer to cubic than linear. 
+
+
+### 5<a name="5"></a>
+$a'_i = x_i / (\sum x_i^2)$
+
+### 6<a name="6"></a>
+A linear model with one predictor is defined by $\hat{y} = \hat{\beta_0} + \hat{\beta_1} x$ and  if $(\bar{y},\bar{x})$ is a point on the line then $\bar{y} = \hat{\beta_0} + \hat{\beta_1} \bar{x}$ then $ \bar{y} - \hat{\beta_1} \bar{x}= \hat{\beta_0}$ which is true by the definition of $\hat{\beta_0}$ on equation 3.4.
+
+### 7<a name="7"></a>
+(skipped)
+
+### 8<a name="8"></a>
+
+```{r}
+library(ISLR)
+```
+
+```{r}
+summary(Auto)
+```
+
+#### 8a
+
+```{r}
+lm.fit <- lm(mpg~horsepower,data = Auto)
+summary(lm.fit)
+```
+
+#### i. 
+A relationship between the predictor and response exists as can be seen using the F-statistic of the model or the p-value associated with horsepower (thus the null hypothesis can be refuted in this case).
+
+#### ii.
+The streng can be measured by how well does the predictor explain the variance in the data. Thus using the R-squared statistic we can see that about 60% of the variance in mpg is explained by horsepower. 
+
+```{r}
+floor(summary(lm.fit)$r.sq*100)
+```
+
+Alternatively, RSE can be used as a measure of strenght of the relationship. RSE measures the standard deviation from the population regression line (this can be interpreted as the lack of fit of the model). This indicates then a percentage error of about 20%.
+
+```{r}
+floor(summary(lm.fit)$sigma/mean(Auto[["mpg"]])*100)
+```
+
+#### iii.
+
+The relationship is negative as can be seen by the coefficient of horsepower.
+
+#### iv.
+
+```{r}
+predict(lm.fit, data.frame(horsepower=c(98)), interval="confidence")
+predict(lm.fit, data.frame(horsepower=c(98)), interval="prediction")
+```
+
+#### b
+
+```{r}
+plot(Auto[["horsepower"]],Auto[["mpg"]],xlab="horsepower",ylab="mpg")+abline(coef(lm.fit),col="red")
+```
+
+#### c
+
+```{r}
+plot(lm.fit)
+```
+
+From the plots above it is easy to notice that there is evident of non-linearity. It is also possible to spot possible outliers and points with high leverage. 
+
+```{r}
+plot(predict(lm.fit),rstudent(lm.fit),col=ifelse(rstudent(lm.fit)>=3,"red","black"))+
+text(predict(lm.fit),rstudent(lm.fit),labels=ifelse(rstudent(lm.fit)>=2.5,names(which(rstudent(lm.fit)>=3)),""),pos=4)
+
+plot(hatvalues(lm.fit),col=ifelse(hatvalues(lm.fit)>0.028,"red","black"))+
+text(hatvalues(lm.fit),labels=ifelse(hatvalues(lm.fit)>0.028,names(which.max(hatvalues(lm.fit)>0.028)),""), cex= 0.7,pos=4)
+```
+
+### 9<a name="9"></a>
+
+#### 9a
+
+```{r}
+pairs(~.,data = Auto)
+```
+
+#### 9b
+
+```{r}
+cor(Auto[,-9])
+```
+
+#### 9c
+
+```{r}
+lm.fit <- lm(mpg~.-name,data=Auto)
+summary(lm.fit)
+```
+
+##### i
+There is a relationship between the predictors and the response, which can be seen by the F-statistic much larger than 1.
+
+##### ii
+By order of p-values; year, weight, origin, displacement. The other values do not have a significant relationship at the 95% confidence level.
+
+##### iii
+The coefficient of year suggests that mpg is improved upon by car makers every year.
+
+#### 9d
+
+```{r}
+par(mfrow = c(2,2))
+plot(lm.fit)
+```
+
+The diagnostic plots identify a few large outliers, entries 326, 227 and 323. Also, points with high leverage are identified. These points are 327, and 394. 327 is then a point with a high leverage and also an outlier.
+
+#### 9e
+
+```{r}
+lm.fit <- lm(mpg~.*.-name*.+.-name,data=Auto)
+summary(lm.fit)
+```
+
+When fitting with all preditors plus all possible interaction terms very few interactions appear statistically significant at 5% level. The significant ones are acceleration:origin  and displacement:year.
+
+#### 9f
+
+From previous experiments it is clear to see that there is a non-linear relationship between mpg and horsepower.
+
+```{r}
+lm.fit1 <- lm(mpg~horsepower+I(horsepower^2),data = Auto)
+summary(lm.fit1)
+
+
+bnd <- seq(0,300,0.1)
+counts <- predict(lm.fit1, data.frame(horsepower=c(bnd),horsepower2=c(bnd^2)))
+
+plot(Auto[["horsepower"]],Auto[["mpg"]],xlab="horsepower",ylab="mpg")+ lines(bnd,counts,col="red")
+```
+
+When regressing mpg onto weight it is noticible that the residuals present a nonlinear relationship, and some indication of heteroscedasticity (seen by a funnel like shape of the residuals). These indicate that transformations such as log X or sqr(X) may provide a better fit by shrinkinge of large values. 
+
+You can observe below that the funnel like shape is significant reduced when comparing the linear residual plot and the log transform plot.
+
+```{r}
+lm.fit2 <- lm(mpg~I(weight^(1/2)),data = Auto)
+lm.fit3 <- lm(mpg~log(weight),data = Auto)
+lm.fit4 <- lm(mpg~weight,data = Auto)
+
+bnd <- seq(0,6000,0.1)
+counts1 <- predict(lm.fit2,data.frame(weight=bnd))
+counts2 <- predict(lm.fit3,data.frame(weight=bnd))
+counts3 <- predict(lm.fit4,data.frame(weight=bnd))
+
+
+par(mfrow=c(2,2))
+plot(lm.fit4)
+
+plot(lm.fit3)
+
+par(mfrow=c(1,1))
+
+plot(Auto[["weight"]],Auto[["mpg"]],xlab="weight",ylab="mpg")+lines(bnd,counts1,col="red")+
+lines(bnd,counts1,col="blue",lty=2)+lines(bnd,counts3,col="green",lty=3)
+```
+
+### 10<a name="10"></a>
+
+#### 10a
+
+```{r}
+library(ISLR)
+?Carseats
+summary(Carseats)
+
+
+lm.fit <- lm(Sales~Price+Urban+US,data=Carseats)
+summary(lm.fit)
+```
+
+#### 10b
+
+There are 3 coefficients in this model; Price, UrbanYes, and USYes. For every one unit increase of Price, the average Sales of a carseat decreases by about 0.05. Since UrbanYes is a qualitative variable it can be interpreted as average difference increase of Sales of a store located in a rural zone or urban zone, holding all other predictors constant. However, since be p-value there is not enough information to tell this relationship is present in the data given the other predictors. Lastly, the USYes coefficient can be interpreted as the average increase in Sales provided that the store is located in the United States. Thus there is an average increase of about 1200 units of sales in the US compared to carseat sales elsewhere.
+
+#### 10c
+This model produces several parallel lines for the different qualitative values.
+
+	
+$$\hat{y}=-0.05\times x+ \begin{cases} 
+      13.04 & UrbanYes=0,USYes=0 \\
+      13.02 & UrbanYes=1,USYes=0 \\
+      14.24 & UrbanYes=0,USYes=1 \\
+      14.22 & UrbanYes=1,USYes=1
+   \end{cases}
+$$
+
+#### 10d
+The null hypothesis can be rejected for USYes and Price.
+
+#### 10e
+
+```{r}
+lm.fit <- lm(Sales~Price+US,,data=Carseats)
+summary(lm.fit)
+```
+
+#### 10f
+Both models fit the data equally well, with the second model having a slightly lower RSE error. 
+
+#### 10g
+
+```{r}
+confint(lm.fit)
+```
+
+#### 10h
+
+As noted from the the plots below there is no evidence of outliers but there are points with high leverage.
+
+```{r}
+plot(predict(lm.fit),rstudent(lm.fit),col=ifelse(rstudent(lm.fit)>3,"red","black"))
+plot(hatvalues(lm.fit),col=ifelse(hatvalues(lm.fit)>(2+1)/dim(Carseats)[1]*3,"red","black"))
+```
+
+### 11<a name="11"></a>
+
+```{r}
+set.seed(1)
+x=rnorm(100)
+y=2*x+rnorm(100)
+```
+
+#### 11a
+
+```{r}
+lm.fit1 <- lm(y~x+0)
+
+summary(lm.fit1)
+```
+
+The null hypothesis can be refuted for this model due to both high F-statistic and low p-values.
+
+#### 11b
+
+```{r}
+lm.fit2 <- lm(x~y)
+summary(lm.fit2)
+```
+
+The null hypothesis cannot be refuted in this step because of the p-value of the intercept being high.
+
+#### 11b
+
+$\hat{\beta}=(\sum_{i=1}^{n}x_{i}y_{i})/(\sum_{i'=1}^{n}x_{i'}^{2})$
+
+$SE(\hat{\beta}) = \sqrt{ \frac{\sum_{i=1}^{n}(y_{i}-x_{i}\hat{\beta})^{2}}{(n-1)\sum_{i'=1}^{n}x_{i'}^{2}}}$
+
+$t-statistic = \frac{\hat{\beta}}{SE(\hat{\beta})} = \frac{(\sum_{i=1}^{n}x_{i}y_{i})/(\sum_{i'=1}^{n}x_{i'}^{2})}{\sqrt{ \frac{\sum_{i=1}^{n}(y_{i}-x_{i}\hat{\beta})^{2}}{(n-1)\sum_{i'=1}^{n}x_{i'}^{2}}}}$
+
+$= \frac{\sum_{i=1}^{n}x_{i}y_{i}\sqrt{n-1}}{\sum_{i=1}^{n}(y_{i}-x_{i}\hat{\beta})^{2}}\frac{1}{\sum_{i'}^{n}x_{i'}^{2}} = \frac{\sum_{i=1}^{n}x_{i}y_{i}\sqrt{n-1}}{\sum_{i=1}^{n}y_i^{2}-2y_{i}x_{i}\hat{\beta}+x_{i}^{2}\hat{\beta}^{2}}\frac{1}{\sum_{i'}^{n}x_{i'}^{2}} = \frac{\sum_{i=1}^{n}x_{i}y_{i}\sqrt{n-1}}{\sqrt{(\sum_{i'=1}^{n}x_{i'}^{2})(\sum_{i'=1}^{n}y_{i'}^{2})-(\sum_{i'=1}^{n}x_{i'}y_{i'})^{2}  }}$
+
+Since,
+
+$(-2\sum_{i'}^{n}y_{i'}x_{i'}\hat{\beta}+\sum_{i'}^{n}x_{i'}^{2}\hat{\beta}^{2})(\sum_{i'}^{n}x_{i'}^{2}) = -2\sum_{i'}^{n}y_{i}x_{i}(\sum_{i=1}^{n}x_{i}y_{i}) +(\sum_{i=1}^{n}x_{i}y_{i})^{2} = -(\sum_{i=1}^{n}x_{i}y_{i})^{2}$
+
+
+#### 11c
+Since no intercept is present, both equations simplify to the same one.
+
+#### 11f
+
+```{r}
+lm.fit1 <- lm(x~y+0)
+summary(lm.fit1)
+
+lm.fit2 <- lm(y~x+0)
+summary(lm.fit2)
+```
+
+### 12<a name="12"></a>
+
+#### 12a
+The coefficient will be the same when $\sum_{i}^{n}x_i^2 = \sum_{i}^{n}y_i^2$
+
+#### 12b
+
+```{r}
+set.seed(47)
+x=rnorm(100)
+y=x+rnorm(100)
+
+head(data.frame(y,x))
+```
+
+```{r}
+lm.fit <- lm(y~x+0)
+summary(lm.fit)
+
+lm.fit <- lm(x~y+0)
+summary(lm.fit)
+```
+
+```{r}
+set.seed(38)
+x=rnorm(100)
+y=abs(x)
+
+head(data.frame(y,x))
+
+lm.fit <- lm(y~x+0)
+summary(lm.fit)
+
+lm.fit <- lm(x~y+0)
+summary(lm.fit)
+```
+
+### 13<a name="13"></a>
+
+#### 13a
+
+```{r}
+set.seed(1)
+x <- rnorm(100,mean = 0,sd = 1)
+```
+
+#### 13b
+
+```{r}
+eps <- rnorm(100,mean = 0,sd = 0.25)
+```
+
+#### 13c
+
+$\hat{\beta_0} = -1$ and $\hat{\beta_1} = 0.5$
+
+```{r}
+y <- -1+0.5*x+eps
+
+length(y)
+```
+
+#### 13d
+
+The scatterplot indicates a linear relationship between the two values.
+
+```{r}
+plot(x,y)+abline(coef = c(-1,0.5), col="red")
+```
+
+#### 13e
+
+$\hat{\beta_0},\hat{\beta_1}$ are very close to $\beta_0,\beta_1$
+
+```{r}
+lm.fit <- lm(y~x)
+summary(lm.fit)
+```
+
+#### 13f
+
+```{r}
+coef(lm.fit)
+plot(x,y)+abline(coef = c(-1,0.5), col="red")+abline(coef=coef(lm.fit),col="blue")
+legend("bottomright",legend=c("Population Regression               ","Least Square                  "),col=c("red","blue"),lty=c(1,1))
+```
+
+#### 13g
+
+There is no evidence that the quadratic term improve the fit due to a lower $R^{2}$, F-statistic, and the p-value of the quadradic coefficient (> 0.05).
+
+```{r}
+lm.fit2 <- lm(y~poly(x,2))
+summary(lm.fit)
+```
+
+#### 13h
+
+```{r}
+# a-f
+set.seed(1)
+x <- rnorm(100,mean = 0,sd = 1)
+eps <- rnorm(100,mean = 0,sd = 0.10)
+y <- -1+0.5*x+eps
+nrow(y) # length of y
+
+plot(x,y) # scatter plot
+
+lm.fit3 <- lm(y~x)
+summary(lm.fit3)
+coef(lm.fit3) # coef of model
+
+lm.fit4 <- lm(y~poly(x,2))
+summary(lm.fit4)
+coef(lm.fit4)
+
+ys <- predict(lm.fit2,data.frame(x=seq(0,3,0.1)))
+plot(x,y)+abline(coef = coef(lm.fit3),col="red")+abline(coef = coef(lm.fit4),col="blue")
+legend("bottomright",legend=c("Linear","Quadradic       "),lty=c(1,1),col=c("red","blue"))
+```
+
+#### 13i
+
+```{r }
+set.seed(1)
+x <- rnorm(100,mean = 0,sd = 1)
+eps <- rnorm(100,mean = 0,sd = 0.80)
+y <- -1+0.5*x+eps
+
+lm.fit5 <- lm(y~x)
+summary(lm.fit5)
+coef(lm.fit5)
+
+lm.fit6 <- lm(y~poly(x,2))
+summary(lm.fit6)
+coef(lm.fit6)
+
+ys <- predict(lm.fit2,data.frame(x=seq(0,3,0.1)))
+
+plot(x,y)+abline(coef = coef(lm.fit5),col="red")+abline(coef = coef(lm.fit6),col="blue")
+legend("bottomright",legend=c("Linear","Quadradic         "),lty=c(1,1),col=c("red","blue"))
+```
+
+#### 13j
+
+As the noise increases, so does the confidence intervals.
+
+```{r}
+confint(lm.fit3)
+confint(lm.fit1)
+confint(lm.fit5)
+```
+
+### 14<a name="14"></a>
+#### 14a
+
+```{r}
+set.seed(1)
+x1 = runif(100)
+x2 = 0.5*x1+rnorm(100)/10
+y  =2+2*x1+0.3*x2+rnorm(100)
+```
+
+The regression coefficients are $\beta_0 =2,\beta_1 =2,\beta_2 = 0.3$
+#### 14b
+
+```{r}
+cor(x1,x2)
+plot(x1,x2)
+```
+
+#### 14c
+
+```{r}
+lm.fit <- lm(y~x1+x2)
+summary(lm.fit)
+```
+
+The model coefficients are as follows; $\hat{\beta_0} = 2.13,\hat{\beta_1}=1.439,\hat{\beta_2}=1$. The null hypothesis can be rejected for $\hat{\beta_0}$ at the 5% confidence level. This is not the case for $\hat{\beta_2}$.
+
+#### 14d
+
+```{r}
+lm.fit <- lm(y~x1)
+summary(lm.fit)
+```
+
+The null hypothesis can be rejected in this case.
+
+#### 14e
+
+```{r}
+lm.fit <- lm(y~x2)
+summary(lm.fit)
+```
+
+The nyll hypothesis can be rejected in this case.
+
+#### 14f
+
+The results do not contradict each other since x1 and x2 are highly correlated. One way to interpret this is that x2 adds no new information when fitting a model that already contains x1, and vice-versa.
+
+#### 14g
+
+```{r}
+x1=c(x1,0.1)
+x2=c(x2,0.8)
+y=c(y,6)
+```
+
+```{r}
+lm.fit <- lm(y~x1+x2)
+lm.fit1 <- lm(y~x1)
+lm.fit2 <- lm(y~x2)
+
+plot(lm.fit)
+```
+
+```{r}
+par(mfrow = c(2,2))
+plot(lm.fit1)
+```
+
+```{r}
+par(mfrow = c(2,2))
+plot(lm.fit2)
+```
+
+The additional observation is a point of high leverage in all 3 models, having significant influence on the model and altering the p-values. This makes it so that the same conclusions are not reached (here both null hypothesis are rejected). Only when regressing y onto x1 that evidence is present of the additional point being an outlier.
+
+### 15<a name="15"></a>
+
+```{r}
+library(MASS)
+attach(Boston)
+
+chas <- as.factor(chas)
+```
+
+Regressing crim onto zn.
+
+```{r}
+lm.zn <- lm(crim~zn)
+summary(lm.zn)
+```
+
+Regressing crim onto indus.
+
+```{r}
+lm.indus <- lm(crim~indus)
+summary(lm.indus)
+```
+
+Regressing crim onto chas.
+
+```{r}
+lm.chas <- lm(crim~chas)
+summary(lm.chas)
+```
+
+Regressing crim onto nox.
+
+```{r}
+lm.nox <- lm(crim~nox)
+summary(lm.nox)
+```
+
+Regressing crim onto rm.
+
+```{r}
+lm.rm <- lm(crim~rm)
+summary(lm.rm)
+```
+
+Regressing crim onto age.
+
+```{r}
+lm.age <- lm(crim~age)
+summary(lm.age)
+```
+
+Regressing crim onto dis.
+
+```{r}
+lm.dis <- lm(crim~dis)
+summary(lm.dis)
+```
+
+Regressing crim onto rad.
+
+```{r}
+lm.rad <- lm(crim~rad)
+summary(lm.rad)
+```
+
+Regressing crim onto tax.
+
+```{r}
+lm.tax <- lm(crim~tax)
+summary(lm.tax)
+```
+
+Regressing crim onto ptratio.
+
+```{r}
+lm.ptratio <- lm(crim~ptratio)
+summary(lm.ptratio)
+```
+
+Regressing crim onto black.
+
+```{r}
+lm.black <- lm(crim~black)
+summary(lm.black)
+```
+
+Regressing crim onto lstat.
+
+```{r}
+lm.lstat <- lm(crim~lstat)
+summary(lm.lstat)
+```
+
+Regressing crim onto medv.
+
+```{r}
+lm.medv <- lm(crim~medv)
+summary(lm.medv)
+```
+
+It can be noted from all the linear models above that there is no evidence that chas and age are associated with crim, and there is evidence of association between the remaining predictors and crim. 
+
+#### 15b
+
+```{r}
+lm.all <- lm(crim~.,data=Boston)
+summary(lm.all)
+```
+
+At the 5% confidence level, the null hypothesis can be rejected for the predictors; zn, dis, rad, black, and medv.
+
+#### 15c
+
+The results are different when fitting a model using all the predictors; In this case, there is no evidence of additional predictors (other than chas, and age) being associated with crim. The only predictors were the null hypothesis can be refuted are zn, dis, rad, black and medv.
+
+```{r}
+xs <- c(coef(lm.zn)[2],coef(lm.indus)[2],coef(lm.chas)[2],coef(lm.nox)[2],coef(lm.rm)[2],coef(lm.age)[2],coef(lm.dis)[2],coef(lm.rad)[2],coef(lm.tax)[2],coef(lm.ptratio)[2],coef(lm.black)[2],coef(lm.lstat)[2],coef(lm.medv)[2])
+ys <- coef(lm.all)[-1]
+
+data.frame(xs,ys)
+plot(xs,ys)
+```
+
+#### 15d
+
+```{r}
+lm.zn3 <- lm(crim~poly(zn,3))
+summary(lm.zn3) # No evidence for cubic term.
+```
+
+```{r}
+lm.indus3 <- lm(crim~poly(indus,3))
+summary(lm.indus3) # Evidence of non linearity.
+```
+
+```{r}
+# chas is qualitative predictor, polynomial does not make sense in this case.
+```

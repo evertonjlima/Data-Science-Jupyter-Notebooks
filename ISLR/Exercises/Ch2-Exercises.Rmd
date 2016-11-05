@@ -1,0 +1,336 @@
+This notebook was prepared by [Everton Lima](https://github.com/evertonjlima).
+
+# Introduction to Statistical Learning Solutions
+## Ch 2 Exercises
+
+### Table of Contents
+#### Conceptual
+- [1](#1)
+- [2](#2)
+- [3](#3)
+- [4](#4)
+- [5](#5)
+- [6](#6)
+- [7](#7)
+
+
+#### Applied
+- [8](#8)
+- [9](#9)
+- [10](#10)
+
+### 1<a name="1"></a>
+#### 1a
+For very large number of observations, and a small set of predictors, the variance within each observation is expectedly small. For any predictor p the variance is defined as $Var(p) = \frac{1}{n}\cdot\sum_{i=1}^n(p_i - \mu)^{2}$ where $\mu$ is the mean of p. From this equation one can easily observe that the variance is inverly proportional to n. Thus, I would expect more flexible models to perform better since it would achieve a low bias and not be penalized for a higher variance in the results.
+
+#### 1b
+If the number of preditors is *extremely large*, and the number of predictors is small then there is a higher variance associated with the number of predictors. In this case also many machine learning methods are not appliable. For example if there is a larger number of preditors than observations the coefficients in a linear regression model cannot be estimated.
+
+
+#### 1c
+A flexible model will perform better.
+
+#### 1d
+A inflexible model will have better performance.
+
+### 2<a name="2"></a>
+#### 2a
+This is an inference problem because we are interest in which factors affect CEO salary. In this case there are 500 observations and 3 predictor values.
+
+#### 2b
+This is a prediction problem. There are 20 observations and 14 preditors.
+
+
+#### 2c
+We are interested in predicting the target variable. There are 3 predictors and the number of observations is the number of weeks in 2012 (52).
+
+### 3<a name="3"></a>
+#### 3a
+
+```{r}
+library('ggplot2')
+library('reshape2')
+
+xrange <- 0:1000
+bias <- 10-xrange
+variance <- xrange
+testError <- 6+(xrange-5)^2
+trainError <- sapply(xrange,function(x){ if(x<=5) 5.5+(x-5)^2  else 11-x })
+
+data=data.frame(xrange,variance,bias,trainError,testError)
+data_long=melt(data,id="xrange")
+
+ggplot(data_long,aes(x=xrange, y=value, colour=variable)) + ylim(2,10) + xlim(0,10) + geom_line(na.rm = T) + 
+theme(axis.line=element_blank(),axis.text.x=element_blank(),
+          axis.text.y=element_blank(),axis.ticks=element_blank(),
+          axis.title.x=element_blank(),
+          axis.title.y=element_blank(),legend.position="none",
+          panel.background=element_blank(),panel.border=element_blank(),panel.grid.major=element_blank(),
+          panel.grid.minor=element_blank(),plot.background=element_blank())
+```
+
+#### 3b
+Variance is directly proportional to the increase in flexibility. The relationship between variance and model flexbility is likely non-linear, however here the relationship is represented as linear. This is still a good representation, since it is clear that an increase in flexbility provides an increase in variance. 
+
+Bias has a inversely proportial relationship with flexibility. From the graph this is clearly the case, as flexbility increases there is a linear decrease in bias.
+
+The test error is represented by an 'U' shape curve. This is because in increase in flexibility typically improves model performance initially. Performance only later worsening when the variance produced by flexbilble models not being off set by a decrease in bias.
+
+The train error curve closely follows the test error curve initially, but as flexbility increases this quantity continues to decrease. With high level of flexbility train error can be reduced to zero, but in such cases, the model is overfitted. It provides no insight on the underlying behavior of $\hat{f}$ but instead it models noise.
+
+The bayes error is represented by a horizontal line. This error is the irreducible error. The curve shows the lower bound of modeling error. It can be infered that a model with no training error is typically modeling noise, since it cannot reasonably be lower than the irreducible error (unless there is no variance inherent in the data, which is unlikely).
+
+### 4<a name="4"></a>
+#### 4a
+In classificational problems the target variagle is typically nominal. Classiying emails into spam or not-spam categories is a tipycall application for classification. Another well known application is if a bank customer is going to default or not default on their loan. However, target variables can also be ordinal. A typical application is rating or score prediction.
+
+#### 4b
+There are a wide range of regression products in machine learning. Its applications long predate machine learning, as regression was first used to predict orbits of planets around the sun. Other applications are predicting stock market percent increase and housing prices.
+
+#### 4c
+Clustering is an important technique or knowledge discovery. Clustering can be use to provide user suggestions by finding similar customers in a webstore, or movie streaming site. 
+
+### 5<a name="5"></a>
+Flexible models make less strict (or none) assumptions about the form of f, while inflexible models have a strong bias in regards to the form of f. 
+
+Flexible models should be preferred when there is a large ammount of data available. This is because is a large ammount of observations is provided then there is a smaller variance associated with the predictors. Moreover, flexible models make better predictive models. 
+
+Inflexible models should be used when the number of observations is small, or it is known that there is a high variance associated with the observations. This type of model is also better at inference.
+
+### 6<a name="6"></a>
+
+Parametric methods makes explicit assumptions about the form of f, while non-parametic methods do not. Parametric methods then suffer from a higher bias, and thus are less flexible than non-parametric methods. This class of model is great for inference since the model provides an expicit relationship between the target variables and the set of predictors.
+
+Non-parametric models then are much more flexible than parametic models, since no form of f is assumed. The goal for this class of model is to estimate f as closely as possible via the observed data. However, they suffer from many disanvantages when compares to parametic methods. Typically more observations are needed (think K-nearest). Moreover, this class of model does not provide an explicit relationship between the target variable and the predictors making non-parametic models harder to interpret.
+
+### 7<a name="7"></a>
+#### 7a
+
+```{r}
+train <- data.frame(X1=c(0,2,0,0,-1,1),X2=c(3,0,1,1,0,1),X3=c(0,0,3,2,1,1),Y=c("Red","Red","Red","Green","Green","Red"))
+print(train) 
+```
+
+```{r}
+scores = apply(train[,-4],1,function(x){  sqrt(sum((c(0,0,0)-x)^2)) })
+names(scores) = 1:6
+print(scores)
+```
+
+#### 7b
+The prediction is 5 because it is the point with the smallest euclidean distance from the origin.
+
+#### 7c
+Red. In this case the points with the smallest distance are 2, 5, and 6. Since 2 and 6 are both red points then the prediction value in also red.
+
+#### 7d
+If the bayes decision boundary is highly non-linear, I would expect the value for K to be small. Small values for K provide a more flexible boundary.
+
+### 8<a name="8"></a>
+#### 8a
+
+The data can also be loaded direclty from the ISLR package.
+
+```{r}
+library('ISLR')
+?College
+```
+
+#### 8b
+
+The fix functions allows the supplied argument to be edited (either data or functions). Here the use of this function is simply for inspection. Other functions such as head are typically more practical for this.
+
+Also, since the data has been loaded from the ISLR library directly, the row names are already set correctly.
+
+```{r}
+head(College[,])
+```
+
+#### 8c
+i. 
+
+```{r}
+summary(College)
+```
+
+ii.
+
+```{r}
+pairs(College[,1:10])
+```
+
+iii.
+
+```{r}
+plot(x=College[,"Outstate"],y=College[,"Private"],xlab="Outsate",ylab="Private")
+```
+
+iv.
+
+```{r}
+Elite = rep("No",nrow(College))
+Elite[College$Top10perc > 50] = "Yes"
+Elite = as.factor(Elite)
+College = data.frame(College,Elite)
+```
+
+```{r}
+summary(Elite)
+```
+
+```{r}
+plot(College[,"Outstate"],Elite,xlab="Outstate")
+```
+
+v.
+
+```{r}
+par(mfrow = c(2,2))
+
+hist(College[,"PhD"],xlab="Percent of faculty with PhD")
+hist(College[,"PhD"],xlab="Percent of faculty with PhD",breaks = 100/5)
+
+hist(College[,"Accept"],xlab="Number of applicants accepted")
+hist(College[,"Room.Board"],xlab="Room and board costs")
+```
+
+vi.
+
+Subtracting the ammount of accepted students divided by the number of applications from one allows us to produce a quantity that measures the difficulty of acceptance for a particular school. We can then use this quantity to answer questions such as; Do difficult to get into schools invest more per student? Is there a relationship between the faculty and student ratio and this quantity?
+
+```{r}
+Unaccept = apply(College[],1,function(x){ 1- as.numeric(x[3]) / as.numeric(x[2])  })
+
+plot(Unaccept,College[,"Expend"],ylab="Ammount Spend per Student",xlim = c(0,1))
+text(Unaccept,College[,"Expend"],labels = ifelse(Unaccept > 0.75,row.names(College),""),pos = 3)
+
+plot(Unaccept,College[,"S.F.Ratio"],ylab="Student Faculty Ratio",xlim = c(0,1),ylim=c(0,25))
+text(Unaccept,College[,"S.F.Ratio"],labels = ifelse(Unaccept > 0.78,row.names(College),""),pos = 3)
+```
+
+#### 9<a name="9"></a>
+##### 9a
+
+The quantitative predictors are displacement,horsepower, weight, acceleration. The remaining ones are qualitative; cylinders, year, origin, name.
+
+##### 9b
+
+```{r}
+dat = apply(Auto[,-c(7,8,9)],2,range)
+row.names(dat) = c("Min","Max")
+dat
+```
+
+##### 9c
+
+```{r}
+dat = apply(Auto[,-c(7,8,9)],2,function(x){ c(mean(x),sd(x)) })
+row.names(dat) = c("Mean","SD")
+dat
+```
+
+##### 9d
+
+```{r}
+dat = apply(Auto[-c(10:85),-c(7,8,9)],2,function(x){ c(range(x),mean(x),sd(x)) })
+row.names(dat) = c("Min","Max","Mean","SD")
+dat
+```
+
+```{r}
+pairs(Auto)
+```
+
+```{r}
+boxplot(mpg~origin,data=Auto,names=c("American","European","Japanese"),main="Miles per Gallon ~ Origin")
+```
+
+```{r}
+boxplot(mpg~cylinders,data=Auto,main="Miles per Gallon ~ Origin")
+```
+
+##### 9f
+
+Any variable, except the number of cylinders and name, seem to be a good predictor in the value of mpg.
+
+#### 10<a name="10"></a>
+##### 10a
+
+```{r}
+library('MASS')
+nrow(Boston) # number of rows.
+ncol(Boston) # number of columns.
+```
+
+Inspecting the data shows that each column is a feature, and each row is an observation (Boston suburb).
+
+```{r}
+head(Boston)
+```
+
+##### 10b
+
+```{r}
+par(mfrow = c(2,2))
+
+plot(Boston[,c("dis","crim")])
+plot(Boston[,c("ptratio","crim")])
+plot(Boston[,c("medv","crim")])
+plot(Boston[,c("indus","crim")])
+```
+
+```{r}
+boxplot(crim~chas,Boston)
+```
+
+##### 10c
+
+There seems to be an association between the median value of owner-occupied homes and crime per capita. Low median value of owner-occupied home indicates a higher crime per capita. 
+
+There is also seem to be a correlation between distance to employment centers and crime. Areas close to employment centers show high crime per capita. 
+
+##### 10d
+
+```{r}
+ranges = apply(Boston,2,range)
+row.names(ranges) = c("min","max")
+ranges
+```
+
+##### 10e
+
+```{r}
+selection = Boston[,"chas"]
+nrow(Boston[selection,])
+```
+
+##### 10f
+
+```{r}
+median(Boston[,"ptratio"])
+```
+
+##### 10g
+
+```{r}
+Boston[which.min(Boston[,"medv"]),]
+```
+
+This suburb presents a significant black population, with all houses being built before 1940, and high teacher pupil ratio when comparing to the other observations in the data.
+
+##### 10h
+
+```{r}
+rooms = lapply(1:8,function(x){ sum(Boston[,"rm"] > x) })
+rooms
+```
+
+Applying the summary function to observations with more the 8 rooms yields the output below. Straight away one can note that these suburbs have a low crime per capita, and high median home value. 
+
+```{r}
+summary(Boston[Boston[,"rm"] > 8,])
+```
+
+```{r}
+apply(Boston[rooms>8,] ,2,mean) < apply(Boston,2,mean)
+```

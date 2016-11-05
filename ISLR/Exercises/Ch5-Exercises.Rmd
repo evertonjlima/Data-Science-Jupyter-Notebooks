@@ -1,0 +1,362 @@
+---
+  output: html_document
+---
+  
+Notebook prepared by [Everton Lima](https://github.com/evertonjlima)
+ 
+# Introduction to Statistical Learning Exercise Solutions Chapter 5
+## Table of Contents
+
+### Conceptual Exercises
+- [1](#1)
+- [2](#2)
+- [3](#3)
+- [4](#4)
+
+### Applied Exercises
+- [5](#5)
+- [6](#6)
+- [7](#7)
+- [8](#8)
+- [9](#9)
+
+
+## Conceptual Exercises
+### 1<a name="1"></a>
+
+$Var(\alpha X + (1-\alpha)Y) = E[\alpha X + (1-\alpha)Y^2]-(E[\alpha X + (1-\alpha)Y]^2)$
+
+Where, 
+
+$E[(\alpha X + (1-\alpha)Y)^2] = E[\alpha^2 X + 2\alpha(1-\alpha)XY+(1-\alpha)^2 Y^2]$
+$= \alpha^2 E[X^2] + 2\alpha(1-\alpha)E[XY]+(1-\alpha)^2E[Y^2]$
+
+and,
+
+$E[\alpha X + (1-\alpha)Y]^2 = (\alpha E[X] + (1-\alpha)E[X])^2$
+$=\alpha^2 E[X]^2 + 2\alpha(1-\alpha)E[X]E[Y] + (1-\alpha)^2 E[X]^2$
+
+thus,
+
+$\alpha^2 E[X^2] + 2\alpha(1-\alpha)E[XY]+(1-\alpha)^2E[Y^2] - (\alpha^2 E[X]^2 + 2\alpha(1-\alpha)E[X]E[Y] + (1-\alpha)^2 E[X]^2)$
+
+$\alpha^2(E[X^2] - E[X]^2) + 2\alpha(1-\alpha)(E[XY] - E[X]E[Y]) + (1-\alpha)^2(E[Y^2]-E[Y]^2)$
+$= \alpha^2\sigma_X^2 + 2(\alpha-\alpha^2)\sigma_{XY} + (1-\alpha)^2\sigma_Y$.
+
+Taking the derivative and setting to zero yields,
+$2\alpha\sigma_X + 2(1-2\alpha)\sigma_{XY} + 2(1-\alpha)\sigma_Y = 0$
+
+$2\alpha (\sigma_X +\sigma_Y+2\sigma_{XY}) = 2\sigma_Y - 2\sigma_{XY}$
+
+Therefore, 
+$\alpha = \frac{\sigma_Y^2 - \sigma_{XY}}{\sigma_X^2 + \sigma_Y^2-2\sigma_{XY}}$
+
+### 2<a name="2"></a>
+#### 2a<a name="2a"></a>
+The probability that the first bootstrap sample is not the jth observation from the original is $\frac{n-1}/{n}$. This is because all samples have the same probability of being picked. Namely, $\frac{1}{n}$. Thus, it follows from the standard rules of probability that not choosing this observation has the probability of $1-\frac{1}{n} = \frac{n-1}/{n}$.
+
+#### 2b<a name="2b"></a>
+Same as in the previous question. The selection of an additional sample does not depend on the already selected samples since _boostrap_ performs repeated sampling with replacement.
+
+#### 2c<a name="2c"></a>
+The probability of not choosing a sample is $1-\frac{1}{n}$ as stated before. Since bootstrap samples with replacement additional samples do not depend of the already chosen values. Therefore, not choosing a sample n times has the probability $(1-\frac{1}{n})_1 \cdot (1-\frac{1}{n})_2 \cdot (1-\frac{1}{n})_3 ... \cdot (1-\frac{1}{n})_n=(1-\frac{1}{n})^n$ since choosing any sample is independent of another. 
+
+#### 2d<a name="2d"></a>
+$\frac{1}{n}^5$
+
+#### 2e<a name="2e"></a>
+$\frac{1}{n}^100$
+
+#### 2f<a name="2f"></a>
+$\frac{1}{n}^10,000$
+
+#### 2g<a name="2g"></a>
+
+```{r}
+prob_jth = function(n){ (1/n)^n }
+x = 1:10000
+y = sapply(x,prob_jth)
+plot(x,y,type='l')
+```
+
+The function rapidly approaches 0. We can observe that the probability of any observation being chosen in all of the samples decrease with the amount of samples.
+
+#### 2h<a name="2h"></a>
+
+```{r}
+# This code in is page 198 of ISLR
+store=rep(NA,10000)
+for(i in 1:10000){
+  store[i]=sum(sample(1:100,rep=TRUE)==4)>0
+}
+
+mean(store)
+```
+
+In the snipped above we are creating a 10,000 samples of integers from 1 to 100 (inclusive) with replacement, and checking the amount of times the number 4 (our jth observation) occurs in each sample. If it occurs at least once, it is recorded in the _store_ list. The final statement shows that about 60% of the samples contain the number 4. This result will vary due to the randomness involved in sampling, however the value will be closed to 60%
+
+The value has a 1 out of a 100 chance of occurring in any sample, or 0.01. Thus, probability of it occurring in a sample of size 100 is about 64%. Since the repeated experiments are independent, and the mean is an unbiased estimate, doing more experiments will result in an approximation of the value 64%. Which confirms the previously derived formulas.
+
+### 3<a name="3"></a>
+#### 3a<a name="3a"></a>
+
+K-fold validation is the approach taken to validate a model by separating the available data into k sets, where one of the folds is selected as the test set and the remaining are used for training. In doing so, we obtain the error of using this particular fold for testing. The process is then repeated once for each fold, and all the errors obtained are averaged. 
+
+#### 3b<a name="3b"></a>
+##### i<a name="3bi"></a>
+ The main disadvantage of using an approach such as k-fold is the computational cost involved. This may provide too time consuming or costly for some models. The validation set approach has a clear benefit in this case, since the model only needs be learnt from the data once, and tested once. However, a validation set may not be available (due to only a small number of observations being available) or may be too costly to obtain in practice. In these cases, the k-fold cross validation is a clear winner, for it allows us to fine tune our model. Furthermore, a validation set may tend to over estimate the error since less data is used for training.
+
+##### i<a name="3bii"></a>
+
+The Leave-One-Out Cross Validation (LOOCV) approach has a worse (or the same, in the case $k=n$) computational cost to K-Fold Cross Validation since the model needs to be trained and tested n times, instead of k. Furthermore, LOOCV suffers from a higher variance in result, since they are typically highly correlated (most models trained are very similar). There are no significant advance to using LOOCV since 5-fold or 10-fold will significantly reduce the computational cost and will neither suffer from high bias or variance.
+
+### 4<a name="4"></a>
+
+In order to estimate the standard deviation of the prediction one can make use of _bootstrap_. This works by repeatedly sampling from our data the tulle of values X, and Y. For each such sample we can obtain a prediction value using the learning method. Finally, we then obtain a histogram for the prediction value which we can use to compute confidence intervals. It is important to keep in mind however, that bootstrap does so with replacement and this significantly affects the prediction value (as opposed to cross validation, that keeps each fold separate). 
+
+This approach will work if we assume independence among the observations. However, some adjustments are possible even in the case of dependency, as in for time data using approaches such as the _block bootstrap_.
+
+
+## Applied Exercises
+
+### 5<a name="5"></a>
+#### 5a<a name="5a"></a>
+
+```{r}
+library(ISLR)
+glm.fit=glm(default~income+balance,family='binomial',data=Default)
+```
+
+#### 5b<a name="5b"></a>
+
+```{r}
+set.seed(3)
+subset=sample(1:1000,500)                                  # i. done by the subset parameter.
+glm.fit=glm(default~income+balance,family='binomial',      # ii. fitting the model.
+            data=Default,subset=subset) 
+
+glm.resp=predict(glm.fit,Default[-subset,],type='response') # iii. computing the posterior.
+glm.pred=ifelse(glm.resp>0.5,'Yes','No')
+
+mean(glm.pred!=Default[-subset,'default'])                 # iv. validation set error
+```
+
+#### 5c<a name="5c"></a>
+
+```{r}
+
+  DefaultValidationFn = function(formula=default~income+balance,n=1000,s=500,seed){
+  set.seed(seed)
+  subset=sample(n,s)                                
+  glm.fit=glm(formula,family='binomial',     
+            data=Default,subset=subset) 
+
+  glm.resp=predict(glm.fit,Default[-subset,],type='response') 
+
+  mean(glm.pred!=Default[-subset,'default'])                 
+  }
+
+for(i in 1:3) print(DefaultValidationFn(seed=i))
+```
+
+#### 5d<a name="5d"></a>
+
+```{r}
+for(i in 1:3) print(DefaultValidationFn(formula=default~income+balance+student,seed=i))
+```
+
+A reduction is not observed when including the variable _student_.
+
+### 6<a name="6"></a>
+#### 6a<a name="6a"></a>
+
+```{r}
+summary(glm(default~income+balance,data=Default,family='binomial'))
+```
+
+#### 6b<a name="6b"></a>
+
+```{r}
+library(boot)
+
+boot.fn = function(data,index){
+  coef(glm(default~income+balance,data=data,subset=index,family='binomial'))
+}
+
+set.seed(1)
+boot.fn(Default,sample(1000,500,replace = T))
+```
+
+#### 6c<a name="6c"></a>
+
+```{r}
+boot(Default,boot.fn,R=1000)
+```
+
+The standard error estimated by the glm function are a good approximation.
+
+
+### 7<a name="7"></a>
+#### 7a<a name="7a"></a>
+```{r}
+library(ISLR)
+glm.fit=glm(Direction~Lag1+Lag2,family='binomial',data=Weekly)
+```
+
+#### 7b<a name="7b"></a>
+```{r}
+glm.fit=glm(Direction~Lag1+Lag2,family='binomial',data=Weekly[-1,])
+```
+
+#### 7c<a name="7c"></a>
+```{r}
+ifelse(predict(glm.fit,Weekly[1,],type='response')>0.5,'Up','Down') 
+Weekly[1,]
+```
+
+It is miss classified.  
+
+#### 7d<a name="7d"></a>
+```{r}
+
+cv=function(i){
+  glm.fit=glm(Direction~Lag1+Lag2,family='binomial',data=Weekly[-i,])
+  pred=ifelse(predict(glm.fit,Weekly[i,],type='response')>0.5,'Up','Down') 
+  sum(pred == Weekly[i,'Direction'])
+}
+
+res=unlist(lapply(1:nrow(Weekly),cv))
+```
+
+
+#### 7e<a name="7e"></a>
+
+```{r}
+mean(res)
+```
+
+The result is slightly better than guessing.
+
+### 8<a name="8"></a>
+#### 8a<a name="8a"></a>
+
+```{r}
+set.seed(1)
+y=rnorm(100)  # n 
+x=rnorm(100)  # p 
+y=x-2*x^2+rnorm(100)
+
+```
+
+$y = x-2*x^2+\epsilon$
+
+#### 8b<a name="8b"></a>
+```{r}
+plot(x,y)
+```
+
+It is clear that there is a non-linear relationship from the parabola shape of the curve.
+
+#### 8c<a name="8c"></a>
+
+```{r}
+library(boot)
+data=data.frame(y,x)
+
+set.seed(34)
+
+for(i in 1:4) 
+  print(cv.glm(data = data,glm(y~poly(x,i),data = data))$delta[1])
+```
+
+#### 8d<a name="8d"></a>
+
+```{r}
+set.seed(43)
+
+for(i in 1:4) 
+  print(cv.glm(data = data,glm(y~poly(x,i),data = data))$delta[1])
+
+```
+
+The result is the same. This is because there is no sampling involved in LOOCV; the model is trained with the same observations for each cross validation test.
+
+#### 8e<a name="8e"></a>
+
+The model with the smallest LOOCV error is the quadratic model. This is to be expected from the equation that defines Y as a second degree polynomial dependent on X.
+
+#### 8f<a name="8f"></a>
+
+```{r}
+for(i in 1:4) {
+  print(summary(glm(y~poly(x,i),data = data)))
+}
+```
+
+All the models agree, on the 5% confidence level; The squared term is seen as significant in all the equation it is present, and the reaming terms are not seem as significant at this confidence level in any model.
+
+### 9<a name="9"></a>
+#### 9a<a name="9a"></a>
+
+```{r}
+library(MASS)
+attach(Boston)
+
+mu=mean(medv) # estimate of population mean
+print(mu)
+```
+
+#### 9b<a name="9b"></a>
+
+```{r}
+sterr = function(x,index){ sd(x[index])/sqrt(length(x[index])) }  # estimate of standard error.
+print(sterr(medv)) 
+```
+
+#### 9c<a name="9c"></a>
+
+```{r}
+library(boot)
+
+set.seed(456)
+boot(medv,function(x,index){mean(x[index])},R=1000)
+```
+
+The results are different but approximate; 0.404878 for the boot estimate and 0.4088611 for the sample estimate.
+
+#### 9d<a name="9d"></a>
+
+```{r}
+mu-2*0.404878  
+mu+2*0.404878  
+```
+
+#### 9e<a name="9e"></a>
+
+```{r}
+print(median(medv))
+```
+
+#### 9f<a name="9f"></a>
+
+```{r}
+boot(medv,function(data,index){median(data[index])},1000)
+```
+
+There is a standard error or 0.3756641 for the estimating the median value.
+
+#### 9g<a name="9g"></a>
+```{r}
+quantile(medv,.1)
+```
+
+#### 9h<a name="9h"></a>
+```{r}
+boot(medv,function(data,index){quantile(medv[index],.1)},R=1000)
+```
+
+There is a standard error of 0.5166154. One can interpret this value to mean the amount that the quarterly deviates from the estimate in each sample.
+
+
+
+
