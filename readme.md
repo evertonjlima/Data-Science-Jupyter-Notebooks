@@ -20,7 +20,8 @@ Solutions to both conceptual and applied exercises of the [ISL](http://www-bcf.u
 |2           | [View Document](http://rpubs.com/evertonjlima/191170) |
 |3           | [View Document](http://rpubs.com/evertonjlima/191172) |
 |4           | [View Document](http://rpubs.com/evertonjlima/218866) | 
-|5           | [View Document](http://rpubs.com/evertonjlima/224488) |    
+|5           | [View Document](http://rpubs.com/evertonjlima/224488) |   
+|6           | [View Document](http://rpubs.com/evertonjlima/226915) |
 
 ## Kaggle Challenges
 

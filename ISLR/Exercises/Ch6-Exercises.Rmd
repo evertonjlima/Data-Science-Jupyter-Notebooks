@@ -1,0 +1,662 @@
+---
+  output: html_document
+---
+  
+Notebook prepared by [Everton Lima](https://github.com/evertonjlima)
+ 
+# Introduction to Statistical Learning Exercise Solutions Chapter 6
+## Table of Contents
+
+### Conceptual Exercises
+- [1](#1)
+- [2](#2)
+- [3](#3)
+- [4](#4)
+- [5](#5)
+- [6](#6)
+- [7](#7)
+
+### Applied Exercises
+- [5](#5)
+- [6](#6)
+- [7](#7)
+- [8](#8)
+- [9](#9)
+- [10](#10)
+- [11](#11)
+
+## Conceptual Exercises
+
+### 1<a name="1"></a>
+#### 1a<a name="1a"></a>
+
+The model that is likely to have the smallest training RSS is the model produced by _best subset_ selection. This is because the other options do not consider all possible models as they are greedy in their approach. Moreover, it is clear that the best subset selection will consider all the models considered by forward and backward step selection. It will then be sure to the select the model with the lowest training RSS.
+
+#### 1b<a name="1b"></a>
+ 
+It is unclear which selection algorithm will produce the model with the lowest test RSS. The model produced by best subset selection certainly has higher chances of producing the model with the lowest training RSS since all subsets are considered. However, it may also overfit the model causing the other approaches to have a better test RSS. Thus, with the information given it is unclear which model will perform best in respect to the test RSS.
+
+#### 1c<a name="1c"></a>
+
+i. True. Forward step selection does not drop the previously chosen predictors, but instead continues in the same search path.
+ii. True. Backward step selection with (k+1)-predictors will drop one predictor at a time and select the k-predictor subset that will provide the lowest training RSS.
+iii. False. While it may occur, the statement is not always true. For example, the forward step selection algorithm selects the predictor with the lowest RSS for the 1-variable model. However, combination of other predictors may have a better RSS score than the model with only 1-variable.
+iv. False. The argument is the same as the above; the algorithms may not consider the same subsets of predictors.
+v. False. Best subset selection may drop previously chosen predictors when a new one is added, since all possible subsets are considered. 
+
+
+### 2<a name="2"></a>
+#### 2a<a name="2a"></a>
+
+Alternative iii is the correct choice; The lasso limits the number of predictors, thus it reduces the inherent variance at the cost of an increase in bias. This can be interpreted as follows. Removing a predictor from the model is equivalent to saying the removed feature does not have a strong relationship with the target value, this may be a biased statement but it decreases the variance as a lower number of values need to be estimated from data.
+
+#### 2b<a name="2b"></a>
+
+iii. Ridge regression will produce more biased models as it shrinks predictors that don't have as a strong relationship with the target variable; the variance will decrease at the cost of an increase in bias.
+
+#### 2c<a name="2c"></a>
+
+ii. Nonlinear methods have a higher variance than regular least scares. The curve will follow the observations more tightly than otherwise, causing the model to perform better when there is a underlying non-linear relationship between the predictors and the target variable.
+
+### 3<a name="3"></a>
+#### 3a<a name="3a"></a>
+There will be a monotonically decrease in RSS as a bigger set of solutions becomes feasible and an increase in variance occurs. The correct alternative is iv.
+
+#### 3b<a name="3b"></a>
+Option ii is the correct one. An increase in $s$ means there will be an increase in flexibility in the model. 
+
+#### 3c<a name="3c"></a>
+
+Alternative iii is the correct option for the reasons discussed above.
+
+#### 3d<a name="3d"></a>
+iv
+
+#### 3e<a name="3e"></a>
+As it names states, the irreducible error will remain constant. Option v is the correct one.
+
+### 4<a name="4"></a>
+#### 4a<a name="4a"></a>
+Option iii; there will be a steady increase as the coefficients are shrieked by the penalty term.
+
+#### 4b<a name="4b"></a>
+
+Option ii; The model will have its variance reduced at the cost of bias. This will cause the test RSS to decrease until the point that a decrease in variance is not offset by an increase in variance, where the test RSS will then increase.
+
+#### 4c<a name="4c"></a>
+Option iv; there will be a steady decrease in variance as the coefficient are shrinked by an increase in the penalty term.
+
+#### 4d<a name="4d"></a>
+Option iii.
+
+#### 4e<a name="4e"></a>
+Option v.
+
+### 5<a name="5"></a>
+
+Skipped
+
+### 6<a name="6"></a>
+
+#### 6a<a name="6a"></a>
+```{r}
+y=12
+lambda=3
+
+ridge = function(b){
+  return( (y-b)^2+lambda*b^2)
+}
+
+bs=lapply(0:100,ridge)
+plot(0:100,bs,type='l',xlab='Beta',ylab='Ridge')
+
+b0x=y/(1+lambda)
+b0y=ridge(b0x)
+  
+points(b0x,b0y,col="red",cex=2,pch=20)
+text(b0x,b0y,labels='B0',pos=3)
+```
+
+#### 6b<a name="6b"></a>
+
+```{r}
+y=50
+lambda=4
+
+lasso = function(b){
+  return((y-b)^2+lambda*abs(b))
+}
+
+min=function(y,lambda){
+  if(y>lambda/2)
+    return(y-lambda/2)
+  else if(y<-lambda/2)
+    return(y+lambda/2)
+  else if( abs(y) <= lambda/2)
+    return(0)
+}
+
+bs=lapply(0:100,lasso)
+plot(0:100,bs,type='l',xlab='Beta',ylab='Lasso')
+
+b0x=min(y,lambda)
+b0y=lasso(b0x)
+
+points(b0x,b0y,col="red",cex=2,pch=20)
+text(b0x,b0y,labels='B0',pos=3)
+```
+
+
+### 7<a name="7"></a>
+
+Skipped
+
+## Applied Exercises
+
+### 8<a name="8"></a>
+#### 8a<a name="8a"></a>
+
+```{r}
+set.seed(42)
+n=100
+x=rnorm(n)  # predictor vector
+e=rnorm(n) # noise vector
+```
+
+#### 8b<a name="8b"></a>
+
+```{r}
+betas=sample(1:n,4)
+betas
+
+y=betas[1]+betas[2]*x+betas[3]*x^2+betas[4]*x^3+e
+
+curve(betas[1]+betas[2]*x+betas[3]*x^2,from=-3, to=3, xlab="x", ylab="y")
+points(data.frame(x,y),col='red')
+```
+
+#### 8c<a name="8c"></a>
+
+```{r}
+library(leaps)
+
+
+PrintBestModelByScore=function(model,score,ord=which.min){
+  # PrintBestModelByScore prints the coefficients of the best model selected.
+  # model is the output of regsubsets function from the leaps package
+  # ord is a function used to return the best model given a vector of scores.
+  #
+  # function is executed for side effects only.
+  #
+  
+  model.summary=summary(model)
+  model.bestcoef=ord(model.summary[[score]])
+  model.which=model.summary$which[model.bestcoef,]
+  
+  print(coef(model,model.bestcoef))
+}
+
+y.bestsub=regsubsets(y~poly(x,10,raw = T),data=data.frame(x,y),method = 'exhaustive')
+
+PrintBestModelByScore(y.bestsub,'cp')
+PrintBestModelByScore(y.bestsub,'bic')
+PrintBestModelByScore(y.bestsub,'adjr2',ord=which.max)
+
+par(mfrow=c(2,2))
+
+# plots
+for(score in c('cp','bic','adjr2','rsq')) 
+  plot(x=summary(y.bestsub)[[score]],xlab='Number of Predictors',ylab=score,type='l')
+```
+
+#### 8d<a name="8d"></a>
+
+```{r}
+# Forward selection
+
+y.forward=regsubsets(y~poly(x,10,raw = T),data=data.frame(x,y),method = 'forward')
+
+PrintBestModelByScore(y.forward,'cp')
+PrintBestModelByScore(y.forward,'bic')
+PrintBestModelByScore(y.forward,'adjr2',ord=which.max)
+
+# plots
+par(mfrow=c(2,2))
+
+for(score in c('cp','bic','adjr2','rsq')) 
+  plot(x=summary(y.forward)[[score]],xlab='Number of Predictors',ylab=score,type='l')
+```
+
+```{r}
+# Barckward Selection
+# Forward selection
+
+y.backward=regsubsets(y~poly(x,10,raw=T),data=data.frame(x,y),method = 'backward')
+
+PrintBestModelByScore(y.backward,'cp')
+PrintBestModelByScore(y.backward,'bic')
+PrintBestModelByScore(y.backward,'adjr2',ord=which.max)
+
+# plots
+par(mfrow=c(2,2))
+
+for(score in c('cp','bic','adjr2','rsq')) 
+  plot(x=summary(y.backward)[[score]],xlab='Number of Predictors',ylab=score,type='l')
+```
+
+There is no difference in the models selected by forward and backward predictor selection. These are also the same ones found in the previous section. 
+
+#### 8e<a name="8e"></a>
+
+```{r}
+# Select the optimal value of lambda by cross validation
+library(glmnet)
+
+y.lasso.cv=cv.glmnet(poly(x,degree = 10,raw=T),y)
+
+y.lasso.cv$lambda.min
+y.lasso.cv$lambda.1se
+```
+
+
+```{r}
+# Plot the cross validation error as a function of lambda
+plot(data.frame(y.lasso.cv$lambda,y.lasso.cv$cvm),xlab='Lambda',ylab='Mean Cross Validation Error',type='l')
+```
+
+```{r}
+# Report the best coefficients found
+predict(y.lasso.cv,s = y.lasso.cv$lambda.min,type='coefficients')
+```
+
+As can be observed from the coefficients obtained, lasso perform much better than both best subset selection and forward subset selection as it is able to correctly select the predictors.
+
+```{r}
+y.lasso.pred=predict(y.lasso.cv,s=y.lasso.cv$lambda.min,newx=poly(x,10,raw=T))
+
+curve(betas[1]+betas[2]*x+betas[3]*x^2,from=-3, to=3, xlab="x", ylab="y")
+points(data.frame(x,y),col='red')
+points(data.frame(x,y.lasso.pred),col='blue')
+```
+
+The predictions made by this model (in blue) accurately follow the observed data (shown in red).
+
+#### 8f<a name="8f"></a>
+
+```{r}
+set.seed(345)
+
+n=100
+betas=sample(1:n,2)
+betas
+
+e=rnorm(n)
+x=rnorm(n)
+
+y2=betas[1]+betas[2]*x^7+e
+
+curve(betas[1]+betas[2]*x^7,from=-3,to=3,xlab='x',ylab='y')
+points(data.frame(x,y2),col='red')
+```
+
+```{r}
+# Best Subset
+
+y2.bestsub=regsubsets(y~poly(x,10,raw=T),data=data.frame(x,y),method = 'exhaustive')
+plot(y2.bestsub)
+
+
+PrintBestModelByScore(y2.bestsub,'cp')
+PrintBestModelByScore(y2.bestsub,'bic')
+PrintBestModelByScore(y2.bestsub,'adjr2',ord=which.max)
+
+par(mfrow=c(2,2))
+
+# plots
+for(score in c('cp','bic','adjr2','rsq')) 
+  plot(x=summary(y2.bestsub)[[score]],xlab='Number of Predictors',ylab=score,type='l')
+```
+
+```{r}
+# Lasso
+y2.lasso.cv=cv.glmnet(poly(x,degree = 10,raw=T),y2)
+plot(data.frame(y2.lasso.cv$lambda,y2.lasso.cv$cvm),xlab='Lambda',ylab='Mean Cross Validation Error',type='l')
+predict(y.lasso.cv,s = y2.lasso.cv$lambda.min,type='coefficients')
+```
+
+Neither approach performs well as neither selects the coefficient related to the seventh power of x. However, the model found does provide a good approximation for the data observed as can be observed below.
+
+```{r}
+y2.lasso.pred=predict(y2.lasso.cv,s = y2.lasso.cv$lambda.min,poly(x,10))
+
+curve(betas[1]+betas[2]*x^7,from=-3,to=3,xlab='x',ylab='y')
+points(data.frame(x,y2),col='red')
+points(data.frame(x,y2.lasso.pred),col='blue')
+```
+
+### 9<a name="9"></a>
+
+#### 9a<a name="9a"></a>
+```{r}
+library(ISLR)
+n=nrow(College)
+x=c()
+
+set.seed(100)
+train=sample(1:n,n/2)
+test=-train
+```
+
+#### 9b<a name="9b"></a>
+```{r}
+lm.fit=lm(Apps~.,data=College[train,])
+lm.pred=predict(lm.fit,newdata = College[test,])
+x=c(x,lm=mean( (lm.pred-College[test,"Apps"])^2 ))
+```
+
+#### 9c<a name="9c"></a>
+```{r}
+grid = 10 ^ seq(4, -2, length=100)
+train.mat = model.matrix(Apps~., data=College[train,])
+test.mat = model.matrix(Apps~., data=College[test,])
+```
+
+
+```{r}
+library(glmnet)
+
+ridge.cv=cv.glmnet(x=train.mat,y=College[train,"Apps"],alpha=0,thresh=1e-12,lambda = grid)
+ridge.fit=glmnet(x=train.mat,y=College[train,"Apps"],alpha=0,lambda = ridge.cv$lambda.min)
+ridge.pred=predict(ridge.fit,newx=test.mat )
+ridge.coef=predict(ridge.fit,type='coefficients',s=ridge.cv$lambda.min)
+
+ridge.cv$lambda.min
+ridge.coef
+
+x=c(x,ridge=mean( (ridge.pred-College[test,2])^2))
+```
+
+#### 9d<a name="9d"></a>
+```{r}
+lasso.cv=cv.glmnet(train.mat,y=College[train,"Apps"],alpha=1,lambda=grid,thresh=1e-12)
+lasso.fit=glmnet(x=as.matrix(College[train,-c(1,2)]),y=College[train,2],alpha=1,lambda = lasso.cv$lambda.min)
+lasso.coef=predict(lasso.fit,type='coefficients',s=lasso.cv$lambda.min)
+
+lasso.cv$lambda.min
+lasso.coef
+
+lasso.pred=predict(ridge.fit,newx=test.mat)
+x=c(x,lasso=mean( (lasso.pred-College[test,2])^2))
+```
+
+#### 9e<a name="9e"></a>
+```{r}
+library(pls)
+set.seed(2)
+
+pcr.fit=pcr(Apps~.,data=College,scale=TRUE,validation='CV',subset=train)
+validationplot(pcr.fit,val.type="MSEP")
+
+pcr.fit$ncomp
+```
+
+From the plot and the object returned we know that the number of components that achieved the lowest cross validation error is 17. The test error is given below.
+
+```{r}
+pcr.pred=predict(pcr.fit,newdata = College[test,-c(2)],ncomp = 16)
+x=c(x,pcr=mean( (pcr.pred-College[test,2])^2))
+```
+
+#### 9f<a name="9f"></a>
+```{r}
+pls.fit=plsr(Apps~.,data=College,scale=TRUE,validation='CV',subset=train)
+validationplot(pls.fit,val.type="MSEP")
+pls.fit$ncomp
+
+pls.pred=predict(pls.fit,newdata = College[test,-c(2)],ncomp = 10)
+x=c(x,pls=mean( (pls.pred-College[test,2])^2))
+```
+
+#### 9g<a name="9g"></a>
+
+```{r}
+sort(x)
+```
+
+From the results obtained there is not a significant difference from fitting a model with least squares, ridge, lasso and partial least squares. The lasso and ridge regression significantly penalize the Books, Personal, Terminal and S.F. Ratio predictors. We can see that these are also not found to be significant in the least squares model.
+
+```{r}
+summary(lm.fit)
+```
+
+Furthermore, Principal Component Regression is the worst fitting procedure for this dataset; It is clear then that the direction with most variance of predictors is not strongly related to the predictors. 
+
+```{r}
+avg_apps=mean(College[,"Apps"])
+1 - mean((College[test, "Apps"] - lm.pred)^2) /mean((College[test, "Apps"] - avg_apps)^2)
+```
+
+The best performing model then errors on average 1,355,557 and 91% of variance present in the data is explained by the model.
+
+
+### 10<a name="10"></a>
+#### 10a<a name="10a"></a>
+
+```{r}
+p=20
+n=1000
+
+set.seed(38)
+
+# Generate noise
+e=rnorm(n)
+
+# Generate Observations
+X=c()
+for(i in 1:p)
+  X=cbind(X,rnorm(n,mean = sample(1:100,1),sd = sample(0:50,1)))
+colnames(X)<-paste('X',1:20,sep = "")
+
+# Generate Coefficients
+betas=sample(0:100,p,replace = T)
+betas[ !sample(0:1,replace = T,20) ]=0
+names(betas)<-paste('X',1:20,sep = "")
+
+# Generate Target Variable
+y.mat=X %*% matrix(betas,nrow = 20)
+y=apply(cbind(y.mat,e),1,sum)
+summary(y)
+
+y.mat=data.frame(X,y)
+
+print(paste("The coefficients chosen are",paste(betas,collapse = " "))) # coefficients generated in the model
+```
+
+#### 10b<a name="10b"></a>
+
+```{r}
+train=sample(1:n,100)
+test=-train
+```
+
+#### 10c<a name="10c"></a>
+```{r}
+library(leaps)
+# Best subset selection
+y.bestsub=regsubsets(y~.,data = y.mat[train,],method = 'exhaustive',nvmax = 20)
+y.bestsub.summary=summary(y.bestsub)
+
+# plot train MSE for each model 
+y.bestsub.mse=1/n*y.bestsub.summary$rss
+
+plot(y.bestsub.mse,xlab="Number of Variables",ylab="Train MSE",type='l')
+axis(1, at=seq(1,20,1))
+```
+
+#### 10d<a name="10d"></a>
+```{r}
+# plot test MSE for each model 
+
+predict.regsubsets=function(object,newdata,id,...){
+  form=as.formula(object$call[[2]])
+  mat=model.matrix(form,newdata)
+  coefi=coef(object,id=id)
+  xvars=names(coefi)
+  mat[,xvars]%*%coefi
+}
+
+ers=c()
+for(i in 1:20)
+  ers=c(ers, mean((y.mat[test,]-predict.regsubsets(y.bestsub,newdata = y.mat[test,],i))^2)  )
+
+plot(ers,type='l',xlab='Number of Predictors',ylab="Test MSE")
+axis(side=1,at=1:20)
+```
+
+#### 10e<a name="10e"></a>
+The minimum value is achieved by a model with 4 predictors.
+
+#### 10f<a name="10f"></a>
+The model used to generate the data has 7 non-zero coefficients.
+
+#### 10g<a name="10g"></a>
+```{r}
+betas.error=c()
+for(i in 1:20){
+  coefi=coef(y.bestsub,id=i)[-1]
+  xvars=names(coefi)
+  e=sqrt(sum((coefi-betas[xvars])^2))
+  betas.error=c(betas.error,e)
+}
+
+plot(scale(betas.error),col='red',ylab='Test MSE & RSE of Coef',
+     xlab="Number of Predictors",type='l',ylim = c(-3,3))
+lines(scale(ers),type='l')
+axis(side=1,at=1:20)
+```
+
+The error of the estimated coefficients follows the curve. however it does give the model with 7 or more coefficients as the model that has the lowest predictor estimate error. 
+
+#### 11<a name="11"></a>
+##### 11a<a name="11a"></a>
+
+```{r}
+library(glmnet)
+library(leaps)
+library(pls)
+library(MASS)
+
+n=nrow(Boston)
+train=sample(1:n,n/2)
+test=-train
+
+Boston.train=model.matrix(crim~.,Boston[train,])
+Boston.test=model.matrix(crim~.,Boston[test,])
+model.errors=c()
+```
+
+```{r}
+
+# Best Subset Selection
+bestsub.train=regsubsets(crim~.,data=Boston[train,],method='exhaustive',nvmax = 14)
+bestsub.train.summary=summary(bestsub.train)
+
+ers=c()
+for(i in 1:13)
+  ers=c(ers, mean((Boston[test,1]-
+                     predict.regsubsets(bestsub.train,newdata = Boston[test,],i))^2)  )
+plot(ers,type='l',xlab="Number of Predictors",ylab="Test MSE")
+
+par(mfrow=c(2,2))
+for(score in c('cp','rss','adjr2','bic')) 
+  plot(bestsub.train.summary[[score]],xlab='Number of Predictors',ylab=score,type='l')
+
+dev.off()
+bestsub.pred=predict.regsubsets(bestsub.train,newdata = Boston[test,],which.min(ers))
+model.errors=c(model.errors,bestsubset=ers[which.min(ers)])
+```
+
+From the plot above we can see that models with a smaller number of predictors perform well in all scores. This gives good evidence for the use of lasso, and ridge regression as potentially performing well in this dataset. Furthermore, from the test MSE we see that the very simple models do indeed perform well.
+
+```{r}
+# Lasso
+set.seed(37)
+lasso.cv=cv.glmnet(x=Boston.train,y=Boston[train,'crim'],alpha = 1)
+
+lasso.cv.cvm.min=which.min(lasso.cv$cvm)
+plot(lasso.cv$lambda,lasso.cv$cvm,type='l',xlab='Lambda',ylab='Cross Validation MSE')
+points(lasso.cv$lambda.min,lasso.cv$cvm[lasso.cv.cvm.min],pch=20,col="red",cex=1)
+
+lasso.cv$lambda.min
+coef(lasso.cv,s = lasso.cv$lambda.min)
+```
+
+Above you can view the cross validation MSE as a function of lambda. We can observe then that a small penalty term provides the best performing model according tot he training cross validation error. This results in a model with 8 predictors.
+
+```{r}
+
+ers=c()
+for(l in lasso.cv$lambda){
+  lasso.pred=predict(lasso.cv,newx=Boston.test,s = l)
+  ers=c(ers,mean( (Boston[test,'crim']-lasso.pred)^2 ))
+}
+
+plot(lasso.cv$lambda,ers,type='l',ylab='Test MSE',xlab='Lambda')
+points(lasso.cv$lambda.min,ers[which.min(lasso.cv$cvm)],pch=20,col="red",cex=1)
+
+ers.min=which.min(ers)
+points(lasso.cv$lambda[ers.min],ers[ers.min],pch=20,col="green",cex=1)
+
+model.errors=c(model.errors,lasso=ers[ers.min])
+lasso.pred=predict(lasso.cv,newx=Boston.test,s = lasso.cv$lambda.min)
+```
+
+From the test MSE we now know that a larger penalty term would have improved the model. The Test MSE error obtained by using the lambda selected via cross validation is shown in red and the optimal test lambda value is shown in green.
+
+```{r}
+# PCR
+set.seed(42)
+pcr.fit=pcr(crim~.,validation='CV',scale=T,data=Boston[train,])
+validationplot(pcr.fit,val.type="MSEP")
+```
+
+From the PCR cross validation plot above we can see that there is not a significant change in the cross validation MSE for 3 through 12 predictors, where the minimum is achieved when 9 principal components are used.
+
+```{r}
+
+ers=c()
+for(i in 1:13){
+  pcr.pred=predict(pcr.fit,newdata = Boston[test,],ncomp = i)
+  ers=c(ers,mean((Boston[test,'crim']-pcr.pred)^2))
+}
+plot(ers,type='l',ylab='Test MSE',xlab='Number of Components')
+points(9,ers[9],col='red',pch=20)
+points(which.min(ers),ers[which.min(ers)],col='green',pch=20)
+
+model.errors=c(model.errors,pcr=ers[9])
+pcr.pred=predict(pcr.fit,newdata = Boston[test,],ncomp = 9)
+```
+
+
+##### 11b<a name="11b"></a>
+
+```{r}
+sort(model.errors)
+
+# R squared
+cor(Boston[test,'crim'],bestsub.pred)^2
+cor(Boston[test,'crim'],pcr.pred)^2
+cor(Boston[test,'crim'],lasso.pred)^2
+```
+
+The best model is best-subset selection is the best performing model on this data according to both Test MSE and R squared, where it explains 46% of the variance encountered in the data. I expect then that models that do not use all predictors will tend to perform well in this dataset.
+
+##### 11c<a name="11c"></a>
+
+Not all predictors are strongly related tot the response variable; using all of them will decrease performance since it will overfit the model
+
+
+
+
+
+
