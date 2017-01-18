@@ -13,7 +13,7 @@ This repo is a collection of notebooks (r markdown, and jupyter) related to data
 ### Introduction to Statistical Learning
 
 ### Solutions
-Solutions to both conceptual and applied exercises of the [ISL](http://www-bcf.usc.edu/~gareth/ISL/index.html) book. 
+Solutions to both conceptual and applied exercises of the [ISLR](http://www-bcf.usc.edu/~gareth/ISL/index.html) book. 
 
 |Chapter No. |                                                                               Exercises                                            |  
 |------------|------------------------------------------------------------------------------------------------------------------------------------|
