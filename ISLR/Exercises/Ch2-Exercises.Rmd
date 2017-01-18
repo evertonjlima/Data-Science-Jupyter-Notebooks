@@ -1,6 +1,6 @@
 This notebook was prepared by [Everton Lima](https://github.com/evertonjlima).
 
-# Introduction to Statistical Learning Solutions
+# Introduction to Statistical Learning Solutions (ISLR)
 ## Ch 2 Exercises
 
 ### Table of Contents
@@ -21,10 +21,10 @@ This notebook was prepared by [Everton Lima](https://github.com/evertonjlima).
 
 ### 1<a name="1"></a>
 #### 1a
-For very large number of observations, and a small set of predictors, the variance within each observation is expectedly small. For any predictor p the variance is defined as $Var(p) = \frac{1}{n}\cdot\sum_{i=1}^n(p_i - \mu)^{2}$ where $\mu$ is the mean of p. From this equation one can easily observe that the variance is inverly proportional to n. Thus, I would expect more flexible models to perform better since it would achieve a low bias and not be penalized for a higher variance in the results.
+For very large number of observations, and a small set of predictors, the variance within each observation is unexpectedly small. For any predictor p the variance is defined as $Var(p) = \frac{1}{n}\cdot\sum_{i=1}^n(p_i - \mu)^{2}$ where $\mu$ is the mean of p. From this equation one can easily observe that the variance is inversely proportional to n. Thus, I would expect more flexible models to perform better since it would achieve a low bias and not be penalized for a higher variance in the results.
 
 #### 1b
-If the number of preditors is *extremely large*, and the number of predictors is small then there is a higher variance associated with the number of predictors. In this case also many machine learning methods are not appliable. For example if there is a larger number of preditors than observations the coefficients in a linear regression model cannot be estimated.
+If the number of predictors is *extremely large*, and the number of predictors is small then there is a higher variance associated with the number of predictors. In this case also many machine learning methods are not applicable. For example if there is a larger number of predictors than observations the coefficients in a linear regression model cannot be estimated.
 
 
 #### 1c
@@ -38,7 +38,7 @@ A inflexible model will have better performance.
 This is an inference problem because we are interest in which factors affect CEO salary. In this case there are 500 observations and 3 predictor values.
 
 #### 2b
-This is a prediction problem. There are 20 observations and 14 preditors.
+This is a prediction problem. There are 20 observations and 14 predictors.
 
 
 #### 2c
@@ -70,38 +70,38 @@ theme(axis.line=element_blank(),axis.text.x=element_blank(),
 ```
 
 #### 3b
-Variance is directly proportional to the increase in flexibility. The relationship between variance and model flexbility is likely non-linear, however here the relationship is represented as linear. This is still a good representation, since it is clear that an increase in flexbility provides an increase in variance. 
+Variance is directly proportional to the increase in flexibility. The relationship between variance and model flexibility is likely non-linear, however here the relationship is represented as linear. This is still a good representation, since it is clear that an increase in flexibility provides an increase in variance. 
 
-Bias has a inversely proportial relationship with flexibility. From the graph this is clearly the case, as flexbility increases there is a linear decrease in bias.
+Bias has a inversely proportional relationship with flexibility. From the graph this is clearly the case, as flexibility increases there is a linear decrease in bias.
 
-The test error is represented by an 'U' shape curve. This is because in increase in flexibility typically improves model performance initially. Performance only later worsening when the variance produced by flexbilble models not being off set by a decrease in bias.
+The test error is represented by an 'U' shape curve. This is because in increase in flexibility typically improves model performance initially. Performance only later worsening when the variance produced by flexible models not being off set by a decrease in bias.
 
-The train error curve closely follows the test error curve initially, but as flexbility increases this quantity continues to decrease. With high level of flexbility train error can be reduced to zero, but in such cases, the model is overfitted. It provides no insight on the underlying behavior of $\hat{f}$ but instead it models noise.
+The train error curve closely follows the test error curve initially, but as flexibility increases this quantity continues to decrease. With high level of flexibility train error can be reduced to zero, but in such cases, the model is over fitted. It provides no insight on the underlying behavior of $\hat{f}$ but instead it models noise.
 
-The bayes error is represented by a horizontal line. This error is the irreducible error. The curve shows the lower bound of modeling error. It can be infered that a model with no training error is typically modeling noise, since it cannot reasonably be lower than the irreducible error (unless there is no variance inherent in the data, which is unlikely).
+The Bayes error is represented by a horizontal line. This error is the irreducible error. The curve shows the lower bound of modeling error. It can be inferred that a model with no training error is typically modeling noise, since it cannot reasonably be lower than the irreducible error (unless there is no variance inherent in the data, which is unlikely).
 
 ### 4<a name="4"></a>
 #### 4a
-In classificational problems the target variagle is typically nominal. Classiying emails into spam or not-spam categories is a tipycall application for classification. Another well known application is if a bank customer is going to default or not default on their loan. However, target variables can also be ordinal. A typical application is rating or score prediction.
+In classifications problems the target variable is typically nominal. Classifying emails into spam or not-spam categories is a elliptical application for classification. Another well known application is if a bank customer is going to default or not default on their loan. However, target variables can also be ordinal. A typical application is rating or score prediction.
 
 #### 4b
 There are a wide range of regression products in machine learning. Its applications long predate machine learning, as regression was first used to predict orbits of planets around the sun. Other applications are predicting stock market percent increase and housing prices.
 
 #### 4c
-Clustering is an important technique or knowledge discovery. Clustering can be use to provide user suggestions by finding similar customers in a webstore, or movie streaming site. 
+Clustering is an important technique or knowledge discovery. Clustering can be use to provide user suggestions by finding similar customers in a web store, or movie streaming site. 
 
 ### 5<a name="5"></a>
 Flexible models make less strict (or none) assumptions about the form of f, while inflexible models have a strong bias in regards to the form of f. 
 
-Flexible models should be preferred when there is a large ammount of data available. This is because is a large ammount of observations is provided then there is a smaller variance associated with the predictors. Moreover, flexible models make better predictive models. 
+Flexible models should be preferred when there is a large amount of data available. This is because is a large amount of observations is provided then there is a smaller variance associated with the predictors. Moreover, flexible models make better predictive models. 
 
 Inflexible models should be used when the number of observations is small, or it is known that there is a high variance associated with the observations. This type of model is also better at inference.
 
 ### 6<a name="6"></a>
 
-Parametric methods makes explicit assumptions about the form of f, while non-parametic methods do not. Parametric methods then suffer from a higher bias, and thus are less flexible than non-parametric methods. This class of model is great for inference since the model provides an expicit relationship between the target variables and the set of predictors.
+Parametric methods makes explicit assumptions about the form of f, while non-parametric methods do not. Parametric methods then suffer from a higher bias, and thus are less flexible than non-parametric methods. This class of model is great for inference since the model provides an explicit relationship between the target variables and the set of predictors.
 
-Non-parametric models then are much more flexible than parametic models, since no form of f is assumed. The goal for this class of model is to estimate f as closely as possible via the observed data. However, they suffer from many disanvantages when compares to parametic methods. Typically more observations are needed (think K-nearest). Moreover, this class of model does not provide an explicit relationship between the target variable and the predictors making non-parametic models harder to interpret.
+Non-parametric models then are much more flexible than parametric models, since no form of f is assumed. The goal for this class of model is to estimate f as closely as possible via the observed data. However, they suffer from many disadvantages when compares to parametric methods. Typically more observations are needed (think K-nearest). Moreover, this class of model does not provide an explicit relationship between the target variable and the predictors making non-parametric models harder to interpret.
 
 ### 7<a name="7"></a>
 #### 7a
@@ -124,12 +124,12 @@ The prediction is 5 because it is the point with the smallest euclidean distance
 Red. In this case the points with the smallest distance are 2, 5, and 6. Since 2 and 6 are both red points then the prediction value in also red.
 
 #### 7d
-If the bayes decision boundary is highly non-linear, I would expect the value for K to be small. Small values for K provide a more flexible boundary.
+If the Bayes decision boundary is highly non-linear, I would expect the value for K to be small. Small values for K provide a more flexible boundary.
 
 ### 8<a name="8"></a>
 #### 8a
 
-The data can also be loaded direclty from the ISLR package.
+The data can also be loaded directly from the ISLR package.
 
 ```{r}
 library('ISLR')
@@ -196,7 +196,7 @@ hist(College[,"Room.Board"],xlab="Room and board costs")
 
 vi.
 
-Subtracting the ammount of accepted students divided by the number of applications from one allows us to produce a quantity that measures the difficulty of acceptance for a particular school. We can then use this quantity to answer questions such as; Do difficult to get into schools invest more per student? Is there a relationship between the faculty and student ratio and this quantity?
+Subtracting the amount of accepted students divided by the number of applications from one allows us to produce a quantity that measures the difficulty of acceptance for a particular school. We can then use this quantity to answer questions such as; Do difficult to get into schools invest more per student? Is there a relationship between the faculty and student ratio and this quantity?
 
 ```{r}
 Unaccept = apply(College[],1,function(x){ 1- as.numeric(x[3]) / as.numeric(x[2])  })
@@ -285,7 +285,7 @@ boxplot(crim~chas,Boston)
 
 ##### 10c
 
-There seems to be an association between the median value of owner-occupied homes and crime per capita. Low median value of owner-occupied home indicates a higher crime per capita. 
+There seems to be an association between the median value of owner-occupied homes and crime per capital. Low median value of owner-occupied home indicates a higher crime per capita. 
 
 There is also seem to be a correlation between distance to employment centers and crime. Areas close to employment centers show high crime per capita. 
 

@@ -1,0 +1,562 @@
+---
+  output: html_document
+---
+
+Notebook prepared by [Everton Lima](https://github.com/evertonjlima)
+ 
+# Introduction to Statistical Learning Solutions (ISLR)
+## Ch 8 Exercises
+## Table of Contents
+
+### Conceptual Exercises
+- [1](#1)
+- [2](#2)
+- [3](#3)
+- [4](#4)
+- [5](#5)
+- [6](#6) 
+
+### Applied Exercises
+- [7](#7)
+- [8](#8)
+- [9](#9)
+- [10](#10)
+- [11](#11)
+- [12](#12)
+
+## Conceptual Exercises
+### 1<a name="1"></a>
+
+```{r}
+pts=data.frame(c(25,25,75,75,70,80),c(75,25,75,50,25,25))
+
+plot(pts,xlim=c(0,100),ylim=c(0,110),pch="",xlab="X1",ylab="X2",xaxt='n',yaxt='n')
+
+lines(x = c(50,50), y = c(0,100))
+lines(x = c(0,50), y = c(65,65))
+lines(x = c(50,100), y = c(60,60))
+lines(x = c(50,100), y = c(40,40))
+lines(x = c(75,75), y = c(1,40))
+
+text(x = 50, y = 108, labels = c("t1"), col = "red")
+text(x = 0, y = 70, labels = c("t2"), col = "red")
+text(x = 100, y = 65, labels = c("t3"), col = "red")
+text(x = 100, y = 45, labels = c("t4"), col = "red")
+text(x = 75, y = 1, labels = c("t5"), col = "red")
+
+text(pts,labels=paste("R",1:6,sep=""))
+```
+
+In two dimensions a tree is a subdivision of the space into rectangular regions where each region is a leaf node.
+
+### 2<a name="2"></a>
+
+If only stumps are considered, then for a predictor $X_j$ the equation for its stump takes the form;
+  $$\hat{f}_j(x_j)=\beta_0+I(K_j<X_j)\beta_1$$
+  
+Now boosting considers several stumps on the set of predictors where the previously chosen predictor may be chosen or not. If another stump is created for a previously chosen predictor $X_i$, then we can define $\hat{f}_i(x_i$ as follows;
+ $$\hat{f}_i(x_i)=\hat{f}_i(x_i)_1 +\hat{f}_i(x_i)_2$$
+ $$=\dot{\beta_0}+I(K_{j1}<X_{j})\beta_1+I(K_{j2}<X_j)\beta_2$$
+ 
+which if $K_{j1} < K_{j2}$ is equivalent to the equation,
+ $$\dot{\beta_0}+I(K_{j1}<X_j<K_{j2})\beta_1+I(K_{j2}s<X_j)(\beta_1+\beta_2)$$
+
+Which can be seen as adding a branch to the stump. Thus, since all functions solely depend on a single predictor the model takes the form of $f(X)=\sum^p_{j=1}f_j(X_j)$. Where $f_j(X_j)=\frac{1}{\lambda}\hat{f_j}(x_j)$.
+ 
+### 3<a name="3"></a>
+
+```{r}
+p=seq(0,1,0.01)
+
+gini= 2*p*(1-p)
+classerror= 1-pmax(p,1-p)
+crossentropy= -(p*log(p)+(1-p)*log(1-p))
+
+plot(NA,NA,xlim=c(0,1),ylim=c(0,1),xlab='p',ylab='f')
+
+lines(p,gini,type='l')
+lines(p,classerror,col='blue')
+lines(p,crossentropy,col='red')
+
+legend(x='top',legend=c('gini','class error','cross entropy'),
+       col=c('black','blue','red'),lty=1,text.width = 0.22)
+
+```
+
+### 4<a name="4"></a>
+
+#### 4a<a name="4a"></a>
+This problem is best done in a piece of paper. The resulting tree has 5 leaf nodes corresponding to each rectangular region of the graph. 
+
+#### 4b<a name="4b"></a>
+
+```{r}
+X1=seq(0,3,0.1)
+X2=seq(0,3,0.1)
+
+plot(NA,NA,xlim=c(-1.2,3),ylim=c(-0.2,3),pch="",xlab="X1",ylab="X2",xaxt='n',yaxt='n')
+pts=data.frame(c(1.5,-0.5,1.5,-0.25,1.50),c(2.5,1.5,1.5,0.5,0.5))
+
+text(pts,labels=c('2.49','-1.06','0.21','-1.80','0.63'))
+text(x = 1, y = -0.2, labels = c("1"), col = "red")
+text(x = 0, y = 0.8, labels = c("0"), col = "red")
+text(x = -1.2, y = 1, labels = c("1"), col = "red")
+text(x = -1.2, y = 2, labels = c("2"), col = "red")
+ 
+lines(x = c(-1,3), y = c(1,1))
+lines(x = c(-1,3), y = c(2,2))
+lines(x = c(0,0), y = c(1,2))
+lines(x = c(1,1), y = c(0,1))
+```
+
+### 5<a name="5"></a>
+In the _majority vote_ approach we assign the observation to the class that occurs the most. Thus, we count the number of assignments done to each class by making use of a cutoff value. As shown below, the observation X is assigned to the Red class.
+
+```{r}
+mjr=c(0.1,0.15,0.2,0.2,0.55,0.6,0.6,0.65,0.7,0.75)
+table(mjr>0.5)
+```
+
+As described in the question, when _average probability_ is used the average is taken from the estimated probabilities that result from the bagging model. The average is 0.45, which determines that X does not belong to the Red class. 
+
+```{r}
+avg=mean(mjr)
+avg
+```
+
+### 6<a name="6"></a>
+
+A regression tree performs subdivisions of the predictor space. The algorithm considers one split at a time in the set of predictors, where the split that is chosen is the one that achieves the most reduction in the RSS. This step will be repeated until threshold values are met (or cannot be met any longer such as minimum number of observations necessary in each node). When predictions are made, new observations travel down the branches of a tree, and upon reaching a leaf node, the average of the observations contained in that leaf is returned.
+
+## Applied Exercises
+### 7<a name="7"></a>
+
+```{r}
+require(randomForest)
+require(knitr)
+require(MASS)
+
+set.seed(1)
+train=sample(1:nrow(Boston),nrow(Boston)/2)
+
+train.rf=function(m.mtry=6,m.ntree=25){
+  rf.boston=randomForest(medv~.,data=Boston,subset=train,m.mtry=6,ntree=m.ntree)
+  rf.pred=predict(rf.boston,Boston[-train,])
+  mse=mean((rf.pred-Boston[-train,])^2)
+  mse
+}
+```
+
+```{r}
+# This may take a few minutes.
+
+mse=c()
+m=c()
+
+min.mtry=10
+max.mtry=16
+
+min.ntree=80
+max.ntree=100
+
+for(mtry in min.mtry:max.mtry){
+  for(ntree in min.ntree:max.ntree){
+    mse=rbind(mse,train.rf(mtry,ntree))
+  }
+    m=cbind(m,mse)
+    mse=c()
+}
+
+rownames(m)=paste('ntree',min.ntree:max.ntree)
+colnames(m)=paste('mtry',min.mtry:max.mtry)
+kable(m)
+```
+
+```{r}
+cols=rainbow(max.mtry)
+
+plot(min.ntree:max.ntree,m[,1],col=cols[1],type='l',ylab='Hold out test error',xlab='ntree',lty=1)
+
+lines(min.ntree:max.ntree,m[,2],col=cols[2],lty=2)
+lines(min.ntree:max.ntree,m[,3],col=cols[3],lty=3)
+lines(min.ntree:max.ntree,m[,4],col=cols[4],lty=4)
+lines(min.ntree:max.ntree,m[,5],col=cols[5],lty=5)
+
+legend(x='topright',legend=paste('mtry',10:15),col=rainbow(5),lty=1:5,ncol=1,text.width = 3)
+```
+
+```{r}
+plot(min.mtry:max.mtry,m[1,],col=cols[1],type='l',
+     ylab='Hold out test error',xlab='mtry',ylim = c(21245,21270),lty=1)
+
+lines(min.mtry:max.mtry,m[2,],col=cols[2],lty=2)
+lines(min.mtry:max.mtry,m[3,],col=cols[3],lty=3)
+lines(min.mtry:max.mtry,m[4,],col=cols[4],lty=4)
+lines(min.mtry:max.mtry,m[5,],col=cols[5],lty=5)
+
+legend(x='topright',legend=paste('ntree',80:85),col=rainbow(5),lty=1:5,ncol=1,text.width = 1)
+```
+
+### 8<a name="8"></a>
+
+#### 8a<a name="8a"></a>
+
+```{r}
+require(ISLR)
+require(tree)
+
+set.seed(42)
+train=sample(1:nrow(Carseats),nrow(Carseats)/2)
+```
+
+#### 8b<a name="8b"></a>
+
+```{r}
+tree.carseats=tree(formula=Sales~.,data=Carseats,subset = train)
+tree.pred=predict(tree.carseats,Carseats[-train,])
+
+mean((tree.pred-Carseats[-train,'Sales'])^2)
+
+plot(tree.carseats)
+text(tree.carseats)
+```
+
+#### 8c<a name="8c"></a>
+
+```{r}
+tree.carseats.cv=cv.tree(tree.carseats) 
+plot(tree.carseats.cv)
+```
+
+```{r}
+prune.carseats=prune.tree(tree.carseats,best=5)
+
+plot(prune.carseats)
+text(prune.carseats) 
+
+tree.pred=predict(prune.carseats,Carseats[-train,])
+mean((tree.pred-Carseats[-train,'Sales'])^2)
+
+plot(tree.pred,Carseats[-train,'Sales'],xlab='prediction',ylab='actual')
+abline(0,1)
+```
+
+From the MSE you can observe that it does not improve the test MSE.
+
+#### 8d<a name="8d"></a>
+
+```{r}
+require(randomForest)
+
+d=ncol(Carseats)-1
+
+set.seed(42)
+carseats.rf=randomForest(Sales~.,data=Carseats,subset=train,mtry=d,importance=T,ntree=100)
+
+tree.pred=predict(carseats.rf,Carseats[-train,])
+mean((tree.pred-Carseats[-train,'Sales'])^2)
+
+plot(carseats.rf)
+varImpPlot(carseats.rf)
+kable(importance(carseats.rf))
+```
+
+The predictor ``Price`` is clearly the most important predictor in predicting ``Sales``. This model also achieves a much lower MSE than the previous one, with almost a half of reduction achieved in the test MSE.
+
+#### 8e<a name="8e"></a>
+
+
+```{r}
+mse=c()
+
+set.seed(42)
+
+for(i in 3:10){
+  carseats.rf=randomForest(Sales~.,data=Carseats,subset=train,mtry=5,importance=T,ntree=100)
+
+  tree.pred=predict(carseats.rf,Carseats[-train,])
+  mse=rbind(mse,mean((tree.pred-Carseats[-train,'Sales'])^2))
+}
+plot(3:10,mse,type='b')
+```
+
+The plot above displays the effect of ``mtry`` in the test MSE. 
+
+```{r}
+require(randomForest)
+
+set.seed(42)
+carseats.rf=randomForest(Sales~.,data=Carseats,subset=train,mtry=9,importance=T,ntree=100)
+
+plot(carseats.rf)
+varImpPlot(carseats.rf)
+kable(importance(carseats.rf))
+```
+
+From the data above you can see that ``ShelveLoc`` is now the most important predictor in terms of MSE (whose absence most increase the training MSE).  Moreover, while considering only 9 predictors for training each tree achieves a lower training MSE the test MSE is higher than the bagging approach. 
+
+### 9<a name="9"></a>
+
+#### 9a<a name="9a"></a>
+
+```{r}
+require(ISLR)
+
+set.seed(42)
+train=sample(1:nrow(OJ),800)
+
+OJ.train=OJ[train,]
+OJ.test=OJ[-train,]
+```
+
+#### 9b<a name="9b"></a>
+
+```{r}
+OJ.tree=tree(Purchase~.,data=OJ.train)  # There is no predictor `Buy`.
+summary(OJ.tree)
+```
+
+#### 9c<a name="9c"></a>
+
+```{r}
+OJ.tree
+```
+
+A possible terminal node is ``PriceDiff < -0.165 27   30.90 MM ( 0.25926 0.74074 ) *``. This node is a child for the splits ``LoyalCH < 0.764572 183  216.60 CH ( 0.72131 0.27869 )``, ``LoyalCH > 0.5036 438  360.80 CH ( 0.85616 0.14384 )`` and the root node ``LoyalCH < 0.5036 362  432.40 MM ( 0.28453 0.71547 )``.
+
+We know then that the tree will predict that the customer will purchase a minute maid if the price difference of Citrus Hill will 0.165 bigger, and the customer brand loyalty is in the interval (0.5,0.76).
+
+#### 9d<a name="9d"></a>
+
+```{r}
+plot(OJ.tree)
+text(OJ.tree)
+```
+
+From the two root node branches we can make some quick observations. The left branch shows that when there is a relative low customer loyalty for Citrus Hill then the Minute Maid. Otherwise, the cheaper drink will be the one purchased. Similarly, in the right sub tree this model predicts that when there is a strong preference for Citrus Hill it will always be the drink chosen. Otherwise, when the preference is not so strong the customer will purchase Minute Maid if it has a lower sale price or its list price is not significantly more than Citrus Hill. Otherwise, the Citrus Hill orange drink will be bought.
+
+#### 9e<a name="9e"></a>
+
+```{r}
+OJ.pred.train=predict(OJ.tree,OJ.train,type = 'class')
+kable(table(OJ.train[,'Purchase'],OJ.pred.train))
+kable(table(OJ.train[,'Purchase'],OJ.pred.train)/nrow(OJ.train))
+
+
+OJ.pred.test=predict(OJ.tree,OJ.test,type = 'class')
+kable(table(OJ.test[,'Purchase'],OJ.pred.test))
+kable(table(OJ.test[,'Purchase'],OJ.pred.test)/nrow(OJ.test))
+```
+
+From the second table we can see that about 48% of the Citrus Hill drinks are correctly predicted in the test data, also about 30% of the Minute Maid drinks are correctly chosen. Signifying a misclassification error rate about about 22%.
+
+#### 9f-h<a name="9f-k"></a>
+
+```{r}
+set.seed(42)
+OJ.tree.cv=cv.tree(OJ.tree,K = 10,FUN = prune.misclass)
+plot(OJ.tree.cv)
+```
+
+From the plot the optimal size is 2.
+
+```{r}
+OJ.tree=prune.misclass(OJ.tree,best = 2)
+
+OJ.pred.train=predict(OJ.tree,OJ.train,type = 'class')
+kable(table(OJ.train[,'Purchase'],OJ.pred.train))
+kable(table(OJ.train[,'Purchase'],OJ.pred.train)/nrow(OJ.train))
+
+
+OJ.pred.test=predict(OJ.tree,OJ.test,type = 'class')
+kable(table(OJ.test[,'Purchase'],OJ.pred.test))
+kable(table(OJ.test[,'Purchase'],OJ.pred.test)/nrow(OJ.test))
+
+plot(OJ.tree)
+text(OJ.tree)
+```
+
+A tree with 2 leaf nodes achieves a misclassification test rate of 25%. This represents a 3% improvement over an unpruned tree for the test data. However, the training error for the unpruned tree is lower. This is a good example of how easy trees can overfit the data.
+
+### 10<a name="10"></a>
+
+#### 10a<a name="10a"></a>
+
+```{r}
+require(ISLR)
+Hitters.unknownSal=is.na(Hitters[,"Salary"])
+Hitters=Hitters[!Hitters.unknownSal,]
+Hitters[,"Salary"]=log(Hitters[,"Salary"])
+
+summary(Hitters)
+```
+
+#### 10b<a name="10b"></a>
+
+```{r}
+Hitters.train=Hitters[1:200,]
+Hitters.test=Hitters[-c(1:200),]
+```
+
+#### 10c-d<a name="10c-d"></a>
+
+```{r}
+require(gbm)
+
+train.mse=c()
+test.mse=c()
+
+for(shr in seq(0,0.08,0.002)){
+  Hitters.gbm=gbm(Salary~.,data=Hitters.train,shrinkage = shr,n.trees = 1000,distribution = 'gaussian')
+  
+  Hitters.pred=predict(Hitters.gbm,Hitters.train,n.trees = 1000)
+  train.mse=rbind(train.mse,mean((Hitters.pred-Hitters.train[,'Salary'])^2))
+  
+  Hitters.pred=predict(Hitters.gbm,Hitters.test,n.trees = 1000)
+  test.mse=rbind(test.mse,mean((Hitters.pred-Hitters.test[,'Salary'])^2))
+}
+
+plot(seq(0,0.08,0.002),train.mse,type='l',xlab='shrinkage',xlim = c(0.003,0.07),ylab='MSE')
+lines(seq(0,0.08,0.002),test.mse,col='red')
+legend(x='top',legend = c('train MSE','test MSE'),col=c('black','red'),lty=1,text.width = 0.005)
+```
+
+
+#### 10e<a name="10e"></a>
+
+```{r}
+tb=c()
+
+Hitters.gbm=gbm(Salary~.,data=Hitters.train,shrinkage = 0.01,n.trees = 1000,distribution = 'gaussian')
+Hitters.pred=predict(Hitters.gbm,Hitters.test,n.trees = 1000)
+tb=cbind(tb,'Boost'=mean((Hitters.pred-Hitters.test[,'Salary'])^2))
+
+# Ch3 - linear regression
+Hitters.lm=lm(Salary~.,Hitters.train)
+Hitters.pred=predict(Hitters.lm,Hitters.test)
+tb=cbind(tb,'Linear'=mean((Hitters.pred-Hitters.test[,'Salary'])^2))
+
+# Ch6 - ridge regression
+require(glmnet)
+
+x = model.matrix(Salary ~ ., data = Hitters.train)
+x.test = model.matrix(Salary ~ ., data = Hitters.test)
+y = Hitters.train$Salary
+
+Hitters.glm=glmnet(x,y,alpha = 0)
+Hitters.pred=predict(Hitters.glm,x.test)
+tb=cbind(tb,'Ridge'=mean((Hitters.pred-Hitters.test[,'Salary'])^2))
+
+kable(tb)
+```
+
+#### 10f<a name="10f"></a>
+
+```{r}
+kable(summary(Hitters.gbm),row.names = F)
+```
+
+#### 10g<a name="10g"></a>
+
+```{r}
+require(randomForest)
+Hitters.rf=randomForest(Salary~.,data = Hitters.train,mtry=ncol(Hitters.train)-1) # bagging m=p
+Hitters.pred=predict(Hitters.rf,Hitters.test)
+mean((Hitters.pred-Hitters.test[,'Salary'])^2)
+```
+
+The test MSE is shown above. 
+
+### 11<a name="11"></a>
+
+#### 11a<a name="11a"></a>
+
+```{r}
+require(ISLR)
+Caravan$Purchase=ifelse(Caravan$Purchase == "Yes",1,0)
+Caravan.train=Caravan[1:1000,]
+Caravan.test=Caravan[-c(1:1000),]
+```
+
+#### 11b<a name="11b"></a>
+
+```{r}
+require(gbm)
+Caravan.gbm=gbm(Purchase~.,data=Caravan.train,n.trees = 1000,shrinkage = 0.01,distribution = "bernoulli")
+kable(summary(Caravan.gbm),row.names = F)
+```
+
+#### 11c<a name="11c"></a>
+
+```{r}
+Caravan.pred=predict(Caravan.gbm,Caravan.test,n.trees = 1000,type='response')
+Caravan.pred=ifelse(Caravan.pred>0.2,1,0)
+kable(table(Caravan.test$Purchase,Caravan.pred))
+```
+
+ About 20% of the people predicted to make a purchase do make one.
+ 
+```{r}
+Caravan.glm=glm(Purchase~.,family='binomial',data = Caravan.train)
+Caravan.pred=predict(Caravan.glm,Caravan.test,type='response')
+Caravan.pred=ifelse(Caravan.pred>0.2,1,0)
+kable(table(Caravan.test$Purchase,Caravan.pred))
+```
+
+Logistic regression performs worse than boosting, with 14% of the purchases being correctly predicted.
+
+### 12<a name="12"></a>
+
+```{r}
+require(ISLR)
+
+set.seed(42)
+Boston.train=sample(1:nrow(Boston),nrow(Boston)/2)
+
+x.train=model.matrix(crim~.:.^2,data=Boston[Boston.train,])
+y.train=Boston$crim[Boston.train]
+
+x.test=model.matrix(crim~.:.^2,data=Boston[-Boston.train,])
+y.test=Boston$crim[-Boston.train]
+```
+
+```{r}
+require(glmnet)
+tb=c()
+grid=seq(0,0.5,0.002)
+
+Boston.glmnet.cv=cv.glmnet(x.train,y.train,alpha=0,lambda=grid)   
+ 
+plot(log(Boston.glmnet.cv$lambda),Boston.glmnet.cv$cvm,type='l',
+     xlab='log(lambda)',ylab='Cross Validation MSE')
+
+Boston.glmnet=glmnet(x.train,y.train,alpha=0,lambda=Boston.glmnet.cv$lambda.min)
+Boston.pred=predict(Boston.glmnet,x.test)
+tb=cbind(tb,'Ridge'=mean((Boston.pred-y.test)^2))
+```
+
+```{r}
+require(randomForest)
+
+Boston.tree=tree(crim~.,data=Boston,subset=Boston.train)
+
+set.seed(42)
+Boston.tree.cv=cv.tree(Boston.tree,K = 5)
+plot(Boston.tree.cv)
+
+Boston.tree=prune.tree(Boston.tree,best=4)
+Boston.pred=predict(Boston.tree,Boston[Boston.train,])
+tb=cbind(tb,'Tree'=mean((Boston.pred-y.test)^2))
+
+row.names(tb)=c('Test MSE')
+kable(tb)
+```
+
+
+
+
+
+
+
+
+

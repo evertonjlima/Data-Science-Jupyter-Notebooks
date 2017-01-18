@@ -1,0 +1,604 @@
+---
+  output: html_document
+---
+
+Notebook prepared by [Everton Lima](https://github.com/evertonjlima)
+ 
+# Introduction to Statistical Learning Solutions (ISLR)
+## Ch 9 Exercises
+## Table of Contents
+
+### Conceptual Exercises
+- [1](#1)
+- [2](#2)
+- [3](#3)
+
+### Applied Exercises
+- [4](#4)
+- [5](#5)
+- [6](#6) 
+- [7](#7)
+- [8](#8)
+
+## Conceptual Exercises
+
+### 1<a name="1"></a>
+
+### 1a<a name="1a"></a>
+
+```{r}
+
+X1=seq(-1,1,0.1)
+plot(X1,1+3*X1,xlab='X1',ylab='X2',type='l',xlim=c(-1,1),ylim=c(-1,4))
+
+for(i in seq(-1,1,length.out = 25)){
+  pts=data.frame(rep(i,25),seq(-1,4,length.out = 25))
+  points(pts,col=ifelse(1+3*pts[,1]-pts[,2]>0,'red','purple'))
+}
+```
+
+The plot shows the linear decision boundary for the equation $1 + 3 X_1 - X_2$. Purple indicates the values such that they $1 + 3 X_1 - X_2\leq0$. 
+
+### 1b<a name="1b"></a>
+
+```{r}
+X1=seq(-1,1,0.1)
+plot(X1,1+3*X1,xlab='X1',ylab='X2',type='l',xlim=c(-1,1),ylim=c(-1,4))
+lines(X1,1-1/2*X1)
+
+for(i in seq(-1,1,length.out = 25)){
+  pts=data.frame(rep(i,25),seq(-1,4,length.out = 25))
+  points(pts,col=ifelse(1+3*pts[,1]-pts[,2]>0,'red','purple'),pch=ifelse(-2+pts[,1]+2*pts[,2]>0,1,2))
+}
+```
+
+Triangles indicates the points that lie below the second hyper plane.
+
+### 2<a name="2"></a>
+#### 2a-b<a name="2a"></a>
+
+```{r}
+
+# a
+X1=seq(-3,3,0.01)
+
+X2=2-sqrt(4-(1+X1)^2)
+plot(X1,X2,type='l',xlim=c(-3,1.5),ylim=c(0,4.5))
+
+X2=2+sqrt(4-(1+X1)^2)
+lines(X1,X2)
+
+# b
+
+for(i in seq(-3,3,length.out = 25)){
+  pts=data.frame(rep(i,25),seq(-1,5,length.out = 25))
+  points(pts,col=ifelse( (1 + pts[,1])^2 + (2-pts[,2])^2 > 4,'blue','red'))
+}
+
+```
+
+The equation describes a circle centered at the point $(-1,2)$. The red points show the set of points such that $(1+X_1)^2+(2-X_2)^2>4$.
+
+#### 2c<a name="2c"></a>
+
+From the plot we can see that the points (0,0),(2,2),(3,8) belong to the blue class, and the point (-1,1) to the red class.
+
+#### 2d<a name="2d"></a>
+
+In order to express the decision boundary in terms of $X_1$ and $X_2$ it is necessary to use quadratic terms. However, if we treat the polynomial transformation of these predictors are completely separate variables then the decision boundary becomes linear. What is happening here is that we are looking for a higher dimensional boundary that separated the two classes, and is equivalent (in this context) to adding more predictors. 
+
+Let $X_1^2$ and $X_1^2$ be the predictors $Y$ and $Z$ respectively. Then,
+
+$$(1+X_1)^2+(2-X_2)^2 = X_1^2+2 X_1 + 1 + X_2^2 - 4 X_2 + 4 = Y + 2 X_1 + Z - 4 X_2 + 5 > 4$$
+
+Which is clearly linear in terms of the predictors $X_1$,$X_2$,Y and Z.
+
+### 3<a name="3"></a>
+
+```{r}
+data=data.frame(X1=c(3,2,4,1,2,4,4),X2=c(4,2,4,4,1,3,1),Y=c('red','red','red','red','blue','blue','blue'))
+
+require(knitr)
+kable(data)
+```
+
+#### 3a<a name="3a"></a>
+
+```{r}
+plot(data[,c(1,2)],col=data$Y)
+``` 
+
+#### 3b<a name="3b"></a>
+
+```{r}
+plot(data[,c(1,2)],col=c('red','red','red','red','blue','blue','blue'))
+abline(-0.5,1)                     # -0.5+X1=X2
+``` 
+
+$$-\frac{1}{2}+X_1+X_2 > 0$$
+
+#### 3c<a name="3b"></a>
+
+
+The classification rules are,
+
+$$-\frac{1}{2}+X_1-X_2 > 0 \rightarrow Blue$$
+
+and,
+
+$$-\frac{1}{2}+X_1-X_2 \leq 0 \rightarrow Red$$
+
+#### 3d<a name="3c"></a>
+
+The margin the minimum distance from the support vectors. Since we know that the distance is simply $Y(\beta_0+\beta_1 X + \beta_2 X_2)$ then we only need evaluate the function on the set of points and choose the minimum.
+
+```{r}
+min(abs(data[,1]-data[,2]-0.5))  # Margin
+```
+
+Plotting the decision boundary is as easy as plotting two additional lines that can be obtained by shifting the intercept of the decision boundary,
+
+```{r}
+plot(data[,c(1,2)],col=data$Y)
+abline(-0.5,1)                       # -0.5+X1-X2=0
+
+# Sketch Margin
+
+abline(0,1,lty=2)
+abline(-1,1,lty=2)
+``` 
+
+#### 3e<a name="3d"></a>
+
+There are four support vector for the maximal margin classifier.
+
+```{r}
+kable(data[which(abs(data[,1]-data[,2]-0.5) ==0.5),])
+```
+
+#### 3f<a name="3f"></a>
+
+The seventh observation is not a support vector. Hence, a small permutation in its position does not change the optimal boundary.
+
+#### 3g<a name="3g"></a>
+
+$$\frac{1}{4} + X_1 - X_2 > 0$$
+
+The equation above separates all observations, but it is not the optimal boundary. This is because its margin is smaller than the optimal choice.
+
+```{r}
+plot(data[,c(1,2)],col=data$Y)
+
+abline(-0.5,1)                          # -0.5+X1-X2=0
+abline(0,1,lty=2)
+abline(-1,1,lty=2)
+
+abline(-0.25,1,col='red')               # -0.25+X1-X2=0
+margin=min(abs(data[,1]-data[,2]-0.25))
+abline(-0.25+margin,1,lty=2,col='red')
+abline(-0.23-margin,1,lty=2,col='red')  # small change in intercept so its easier to see it in the plot.
+```
+
+#### 3h<a name="3h"></a>
+
+```{r}
+plot(data[,c(1,2)],col=data$Y)
+abline(-0.5,1)                       # -0.5+X1-X2=0
+
+# Sketch Margin
+abline(0,1,lty=2)
+abline(-1,1,lty=2)
+
+points(2.5,3.5,col='blue')                # (2.5,3.5)
+```
+
+## Applied Exercises
+
+### 4<a name="4"></a>
+
+The first step is to generate data. A simple manner in which to generate data is to sample from a normal distribution. This is done by the code snippet below. Moreover, the class assignment of a point is done by checking if the point lies above or below a decision boundary. For this question, I have selected $\frac{2}{3}(X-3)^2+X-2$ to be such boundary.
+
+```{r}
+# generate dataset
+set.seed(22)
+X=data.frame(X1=abs(rnorm(100,1.5,1.2)),X2=abs(rnorm(100,1.5,1)+0.2))
+pts=seq(0,5,length.out = 100)
+
+# nonlinear decision boundary
+class=ifelse(2/3*(X[,1]-3)^2+X[,1]-2-X[2]>0,'red','blue')  # Yl-Yp > 0 => Point lies above the line
+
+plot(X,xlab='X1',ylab='X2',col=class)
+```
+
+Now we understand how to generate data the next step is to train the two classifiers. This can easily be done by using the ``svm`` function from the, uniquely named, ``e1071`` library. This function allows to fit both linear and polynomial boundary. 
+
+```{r}
+# linear SVM
+require(e1071)
+
+svm.linear=svm(class~.,data=data.frame(X,class=as.factor(class)),kernel='linear')
+summary(svm.linear)
+
+svm.linear.pred=predict(svm.linear,X,type='response')
+table(class,svm.linear.pred)
+```
+
+The linear model achieves a miss classification rate of 25%. Moreover, more than half of the observations are used as support vectors. 
+
+Continue on to fit a polynomial SVM.
+
+```{r}
+# fitting a polynomial kernel
+svm.poly=svm(class~.,data=data.frame(X,class=as.factor(class)),kernel='polynomial')
+summary(svm.poly)
+
+svm.poly.pred=predict(svm.poly,X,type='response')
+table(class,svm.poly.pred)
+```
+
+From the the output of the function we can note that a polynomial of degree 3 was selected and 69 out of 100 observations are used as Support Vectors. Moreover, we can see from the confusion matrix above that 16 observations are misclassified; This model has a 16% classifications error rate on the training set.
+
+In order to get the most of our SVM with a polynomial decision boundary we should do parameter tuning. As shown in the lab, this can be done by the ``tune`` function. 
+
+```{r}
+# parameter tuning for a polynomial SVM
+set.seed(42)
+svm.poly.tune=tune(method=svm,y~.,data=data.frame(X,y=as.factor(class)),
+                   kernel="polynomial",ranges=list(cost=c(seq(0.05,1,length.out = 23),5,10,100)) )
+svm.poly.tune
+svm.poly.tune$best.model
+
+svm.poly.pred=predict(svm.poly.tune$best.model,X,type=response)
+table(class,svm.poly.pred)
+```
+
+From the output of the snippet above we can see that a small increase in the cost improves the model. When the cost parameter is set of 100 then the polynomial SVM has a miss classification rate of 11%, on the training data. Note that there are lesser amount of observations being used as support vectors; Increasing the cost parameter has had the effect of decreasing the bias for this model.
+
+### 5<a name="5"></a>
+
+#### 5a<a name="5a"></a>
+
+```{r}
+x1=runif(500)-0.5
+x2=runif(500)-0.5
+y=1*(x1^2-x2^2 > 0 )
+```
+
+#### 5b<a name="5b"></a>
+
+```{r}
+plot(x1,x2,col=ifelse(y,'red','blue'))
+```
+
+#### 5c<a name="5c"></a>
+
+```{r}
+require(glm)
+glm.fit=glm(y~. ,family='binomial', data=data.frame(x1,x2,y))
+glm.fit
+```
+
+#### 5d<a name="5d"></a>
+
+In the plot below the circles are observations that are classified correctly, and the crosses are misclassified. It is clear that this model performs poorly as it predicts class 1 for all observations.
+
+```{r}
+glm.pred=predict(glm.fit,data.frame(x1,x2))   # returns the log odds value.
+plot(x1,x2,col=ifelse(glm.pred>0,'red','blue'),pch=ifelse(as.integer(glm.pred>0) == y,1,4))
+```
+
+#### 5e<a name="5e"></a>
+
+```{r}
+glm.fit=glm(y~poly(x1,2)+poly(x2,2) ,family='binomial', data=data.frame(x1,x2,y))
+```
+
+#### 5f<a name="5f "></a>
+
+Again, the circles are observations that are classified correctly. As we can see from the absence of crosses, all training observations are correctly classified.
+
+```{r}
+glm.pred=predict(glm.fit,data.frame(x1,x2))     # returns the log-odds.
+plot(x1,x2,col=ifelse(glm.pred>0,'red','blue'),pch=ifelse(as.integer(glm.pred>0) == y,1,4))
+```
+
+#### 5g<a name="5g "></a>
+
+The same is done as before, but now with a linear SVM.
+
+```{r}
+svm.fit=svm(y~.,data=data.frame(x1,x2,y=as.factor(y)),kernel='linear')
+svm.pred=predict(svm.fit,data.frame(x1,x2),type='response')
+plot(x1,x2,col=ifelse(svm.pred!=0,'red','blue'),pch=ifelse(svm.pred == y,1,4))
+```
+
+#### 5f<a name="5f "></a>
+
+More of the same but now the SVM uses a polynomial kernel. As can be observed from the plot below, there is a significant improvement when compared to using a linear kernel, as only a few observations are misclassified. 
+
+```{r}
+svm.fit=svm(y~.,data=data.frame(x1,x2,y=as.factor(y)),kernel='polynomial',degree=2)
+svm.pred=predict(svm.fit,data.frame(x1,x2),type='response')
+plot(x1,x2,col=ifelse(svm.pred!=0,'red','blue'),pch=ifelse(svm.pred == y,1,4))
+```
+
+#### 5i<a name="5i "></a>
+
+From the plots it is clear to see that the polynomial logit model performs much better than SVM with a polynomial kernel, on the training data. If we examine the confusion matrix (shown below) we can see that there are 24 observations that are misclassified by the SVM whilst the logit model has 100% accuracy.
+
+```{r}
+require(knitr)
+
+kable(table(y,as.integer(glm.pred>0)))
+kable(table(y,svm.pred))
+```
+
+### 6<a name="6"></a>
+
+#### 6a<a name="6a"></a>
+
+```{r}
+set.seed(42)
+
+x1=runif(500)-0.5
+x2=runif(500)-0.5
+
+y=ifelse(-0.2*x1+x2 > 0,'red','blue')
+plot(x1,x2,col=y)
+```
+
+#### 6b<a name="6b"></a>
+
+A straightforward way to produce the training error is to simply train several models.
+
+```{r}
+costs=seq(1,50,length.out = 20)
+
+perf=c()
+for(c in costs){
+  svm.fit=svm(y~.,data=data.frame(x1,x2,y),kernel='linear',cost=c)
+  svm.pred=predict(svm.fit,data.frame(x1,x2))
+  error=mean(svm.pred!=y)
+
+  perf=rbind(perf,c(c,error))
+}
+```
+
+The ``tune`` function can be used in order to obtain cross validation error. I have chosen to do 20-fold cross validation is used. Note that different executions of the snippet below will produce different graphs due to the sampling that occurs when cross validation is done. 
+
+```{r}
+set.seed(42)
+costs=data.frame(cost=costs)
+svm.tune=tune(svm,y~.,data=data.frame(x1,x2,y),ranges=costs,tunecontrol=tune.control(cross=20))
+```
+
+From the plot below one can note that the cross-validation error (shown in black) and the training error follow the same trend, with the cross-validation error achieving a higher value. 
+
+```{r}
+plot(svm.tune$performances[,c(1,2)],type='l',ylim=c(0,0.02),xlim=c(0,50))
+lines(perf,col='red')
+```
+
+### 7<a name="7"></a>
+
+### 7a<a name="7a"></a>
+
+```{r}
+require(ISLR)
+
+Auto$mpg=ifelse(Auto$mpg>median(Auto$mpg),1,0)
+table(Auto$mpg)
+```
+
+### 7b<a name="7b"></a>
+
+The cross-validation errors can be produced with ease by the ``tune`` function from the ``e1071``. This is done by the code below.
+
+```{r}
+require(e1071)
+
+costs=data.frame(cost=seq(0.05,100,length.out = 20))               # tuning grid for the cost parameter.
+svm.tune=tune(svm,mpg~.,data=Auto,ranges=costs,kernel='linear')     # 10-fold cross validation.
+svm.tune
+```
+
+Moreover, if we plot we values we can see that while the cost of about 5 achieves the most reduction in the miss classification error.
+
+```{r}
+plot(svm.tune$performance[,c(1,2)],type='l')
+```
+
+### 7c<a name="7c"></a>
+
+```{r}
+params=cbind(costs,data.frame(degree=seq(1,100,length.out = 20),gamma=seq(1,100,length.out = 20)))
+svm.poly=tune(svm,mpg~.,data=Auto,ranges=params,kernel='polynomial')
+svm.poly
+
+```
+
+```{r}
+svm.radial=tune(svm,mpg~.,data=Auto,ranges=costs,kernel='radial')
+svm.radial
+```
+
+### 8<a name="8"></a>
+
+#### 8a<a name="8a"></a>
+
+```{r}
+set.seed(42)
+train=sample(1:1070,800)
+test=(1:1070)[-train]
+
+tb=c()
+res=c()
+```
+
+#### 8b<a name="8b"></a>
+
+```{r}
+require(ISLR)
+require(e1071)
+
+svm.fit=svm(Purchase~.,data=OJ,subset=train,cost=0.01,kernel='linear')
+summary(svm.fit)
+```
+
+From the output of R's ``summary`` function we can see that 439 observations are used as support vector. Moreover, the support vectors are almost equally split among the classes. 
+
+#### 8c<a name="8c"></a>
+
+```{r}
+# train
+svm.pred=predict(svm.fit,OJ[train,])
+kable(table(OJ[train,'Purchase'],svm.pred))
+
+mean(OJ$Purchase[train] != svm.pred)
+res=cbind(res,'train'=mean(OJ$Purchase[train] != svm.pred))
+```
+
+```{r}
+# test
+svm.pred=predict(svm.fit,OJ[test,])
+kable(table(OJ[test,'Purchase'],svm.pred))
+
+mean(OJ$Purchase[test] != svm.pred)
+res=cbind(res,'test'=mean(OJ$Purchase[test] != svm.pred))
+```
+
+#### 8d<a name="8d"></a>
+
+```{r}
+svm.tune=tune(svm,Purchase~.,data=OJ[train,],ranges=data.frame(cost=seq(0.01,10,25)),kernel='linear')
+summary(svm.tune)
+res=cbind(res,'CV'=svm.tune$best.performance)
+```
+
+#### 8e<a name="8e"></a>
+
+```{r}
+svm.pred=predict(svm.tune$best.model,OJ[train,])
+kable(table(OJ[train,'Purchase'],svm.pred))
+mean(OJ$Purchase[train] != svm.pred)
+
+res=cbind(res,'train.tuned'=mean(OJ$Purchase[train] != svm.pred))
+```
+
+```{r}
+svm.pred=predict(svm.tune$best.model,OJ[test,])
+kable(table(OJ[test,'Purchase'],svm.pred))
+mean(OJ$Purchase[test] != svm.pred)
+
+res=cbind(res,'test.tuned'=mean(OJ$Purchase[test] != svm.pred))
+
+tb=rbind(tb,res)
+res=c()
+```
+
+#### 8f<a name="8f"></a>
+
+```{r}
+# b
+svm.fit=svm(Purchase~.,data=OJ,subset=train,cost=0.01,kernel='radial')
+summary(svm.fit)
+```
+
+```{r}
+# train
+svm.pred=predict(svm.fit,OJ[train,])
+kable(table(OJ[train,'Purchase'],svm.pred))
+mean(OJ$Purchase[train] != svm.pred)
+res=cbind(res,'train'=mean(OJ$Purchase[train] != svm.pred))
+
+
+# test
+svm.pred=predict(svm.fit,OJ[test,])
+kable(table(OJ[test,'Purchase'],svm.pred))
+mean(OJ$Purchase[test] != svm.pred)
+res=cbind(res,'train'=mean(OJ$Purchase[test] != svm.pred))
+
+```
+
+```{r}
+svm.tune=tune(svm,Purchase~.,data=OJ[train,],ranges=data.frame(cost=seq(0.01,10,25)))
+summary(svm.tune)
+res=cbind(res,'CV'=svm.tune$best.performance)
+```
+
+```{r}
+# train
+svm.pred=predict(svm.tune$best.model,OJ[train,])
+kable(table(OJ[train,'Purchase'],svm.pred))
+mean(OJ$Purchase[train] != svm.pred)
+res=cbind(res,'train.tuned'=mean(OJ$Purchase[train] != svm.pred))
+
+
+# test
+svm.pred=predict(svm.tune$best.model,OJ[test,])
+kable(table(OJ[test,'Purchase'],svm.pred))
+mean(OJ$Purchase[test] != svm.pred)
+res=cbind(res,'test.tuned'=mean(OJ$Purchase[test] != svm.pred))
+
+tb=rbind(tb,res)
+res=c()
+```
+
+#### 8g<a name="8g"></a>
+
+```{r}
+# b
+svm.fit=svm(Purchase~.,data=OJ,subset=train,cost=0.01,kernel='polynomial')
+summary(svm.fit)
+```
+
+```{r}
+# train
+svm.pred=predict(svm.fit,OJ[train,])
+kable(table(OJ[train,'Purchase'],svm.pred))
+mean(OJ$Purchase[train] != svm.pred)
+res=cbind(res,'train'=mean(OJ$Purchase[train] != svm.pred))
+
+# test
+svm.pred=predict(svm.fit,OJ[test,])
+kable(table(OJ[test,'Purchase'],svm.pred))
+mean(OJ$Purchase[test] != svm.pred)
+res=cbind(res,'test'=mean(OJ$Purchase[test] != svm.pred))
+```
+
+```{r}
+svm.tune=tune(svm,Purchase~.,data=OJ[train,],ranges=data.frame(cost=seq(0.01,10,25)),kernel='polynomial')
+summary(svm.tune)
+
+res=cbind(res,'CV'=svm.tune$best.performance)
+```
+
+```{r}
+# train
+svm.pred=predict(svm.tune$best.model,OJ[train,])
+kable(table(OJ[train,'Purchase'],svm.pred))
+mean(OJ$Purchase[train] != svm.pred)
+res=cbind(res,'train.tuned'=mean(OJ$Purchase[train] != svm.pred))
+
+
+# test
+svm.pred=predict(svm.tune$best.model,OJ[test,])
+kable(table(OJ[test,'Purchase'],svm.pred))
+mean(OJ$Purchase[test] != svm.pred)
+res=cbind(res,'test.tuned'=mean(OJ$Purchase[test] != svm.pred))
+
+```
+
+#### 8h<a name="8h"></a>
+
+The linear SVM performs best on this data.
+
+```{r}
+kable(tb)
+```
+
+
+
+
+
+

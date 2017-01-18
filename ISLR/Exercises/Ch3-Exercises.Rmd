@@ -1,7 +1,7 @@
 This notebook was prepared by [Everton Lima](https://github.com/evertonjlima).
 
-# Introduction to Statistical Leaning (ISL)
-## Ch 3 Applied Exercises 
+# Introduction to Statistical Learning Solutions (ISLR)
+## Ch 3 Exercises 
 
 ## Table of contents
 
@@ -94,13 +94,13 @@ summary(lm.fit)
 A relationship between the predictor and response exists as can be seen using the F-statistic of the model or the p-value associated with horsepower (thus the null hypothesis can be refuted in this case).
 
 #### ii.
-The streng can be measured by how well does the predictor explain the variance in the data. Thus using the R-squared statistic we can see that about 60% of the variance in mpg is explained by horsepower. 
+The string can be measured by how well does the predictor explain the variance in the data. Thus using the R-squared statistic we can see that about 60% of the variance in mpg is explained by horsepower. 
 
 ```{r}
 floor(summary(lm.fit)$r.sq*100)
 ```
 
-Alternatively, RSE can be used as a measure of strenght of the relationship. RSE measures the standard deviation from the population regression line (this can be interpreted as the lack of fit of the model). This indicates then a percentage error of about 20%.
+Alternatively, RSE can be used as a measure of strength of the relationship. RSE measures the standard deviation from the population regression line (this can be interpreted as the lack of fit of the model). This indicates then a percentage error of about 20%.
 
 ```{r}
 floor(summary(lm.fit)$sigma/mean(Auto[["mpg"]])*100)
@@ -129,7 +129,7 @@ plot(Auto[["horsepower"]],Auto[["mpg"]],xlab="horsepower",ylab="mpg")+abline(coe
 plot(lm.fit)
 ```
 
-From the plots above it is easy to notice that there is evident of non-linearity. It is also possible to spot possible outliers and points with high leverage. 
+From the plots above it is easy to notice that there is evident of non-linearity. It is also possible to spot possible outlines and points with high leverage. 
 
 ```{r}
 plot(predict(lm.fit),rstudent(lm.fit),col=ifelse(rstudent(lm.fit)>=3,"red","black"))+
@@ -176,7 +176,7 @@ par(mfrow = c(2,2))
 plot(lm.fit)
 ```
 
-The diagnostic plots identify a few large outliers, entries 326, 227 and 323. Also, points with high leverage are identified. These points are 327, and 394. 327 is then a point with a high leverage and also an outlier.
+The diagnostic plots identify a few large outlines, entries 326, 227 and 323. Also, points with high leverage are identified. These points are 327, and 394. 327 is then a point with a high leverage and also an outlier.
 
 #### 9e
 
@@ -185,7 +185,7 @@ lm.fit <- lm(mpg~.*.-name*.+.-name,data=Auto)
 summary(lm.fit)
 ```
 
-When fitting with all preditors plus all possible interaction terms very few interactions appear statistically significant at 5% level. The significant ones are acceleration:origin  and displacement:year.
+When fitting with all predictors plus all possible interaction terms very few interactions appear statistically significant at 5% level. The significant ones are acceleration:origin  and displacement:year.
 
 #### 9f
 
@@ -202,7 +202,7 @@ counts <- predict(lm.fit1, data.frame(horsepower=c(bnd),horsepower2=c(bnd^2)))
 plot(Auto[["horsepower"]],Auto[["mpg"]],xlab="horsepower",ylab="mpg")+ lines(bnd,counts,col="red")
 ```
 
-When regressing mpg onto weight it is noticible that the residuals present a nonlinear relationship, and some indication of heteroscedasticity (seen by a funnel like shape of the residuals). These indicate that transformations such as log X or sqr(X) may provide a better fit by shrinkinge of large values. 
+When regressing mpg onto weight it is noticeable that the residuals present a nonlinear relationship, and some indication of heteroscedasticity (seen by a funnel like shape of the residuals). These indicate that transformations such as log X or sqr(X) may provide a better fit by shrinking of large values. 
 
 You can observe below that the funnel like shape is significant reduced when comparing the linear residual plot and the log transform plot.
 
@@ -537,7 +537,7 @@ lm.fit <- lm(y~x2)
 summary(lm.fit)
 ```
 
-The nyll hypothesis can be rejected in this case.
+The null hypothesis can be rejected in this case.
 
 #### 14f
 

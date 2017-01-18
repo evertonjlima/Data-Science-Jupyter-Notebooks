@@ -1,4 +1,4 @@
-# Data Science Jupyter Notebooks
+# Data Science Notebooks 
 
 This repo is a collection of notebooks (r markdown, and jupyter) related to data science. See [index](#index) section for list of content. 
 
@@ -17,16 +17,20 @@ Solutions to both conceptual and applied exercises of the [ISL](http://www-bcf.u
 
 |Chapter No. |                                                                               Exercises                                            |  
 |------------|------------------------------------------------------------------------------------------------------------------------------------|
-|2           | [View Document](http://rpubs.com/evertonjlima/191170) |
-|3           | [View Document](http://rpubs.com/evertonjlima/191172) |
-|4           | [View Document](http://rpubs.com/evertonjlima/218866) | 
-|5           | [View Document](http://rpubs.com/evertonjlima/224488) |   
-|6           | [View Document](http://rpubs.com/evertonjlima/226915) |
+|2           | [View Document](http://rpubs.com/evertonjlima/242620) |
+|3           | [View Document](http://rpubs.com/evertonjlima/242622) |
+|4           | [View Document](http://rpubs.com/evertonjlima/242623) | 
+|5           | [View Document](http://rpubs.com/evertonjlima/242625) |   
+|6           | [View Document](http://rpubs.com/evertonjlima/242626) |
+|7           | [View Document](http://rpubs.com/evertonjlima/242631) |
+|8           | [View Document](http://rpubs.com/evertonjlima/242633) |
+|9           | [View Document](http://rpubs.com/evertonjlima/242633) |
+|10          | Soon |
 
 ## Kaggle Challenges
 
 
 | Challenge          | Description                                          | Notebook  |
 |--------------------|------------------------------------------------------|-----------|
-| Digit Recognition  | Feature Engineering, and KNN.       |[View Jupyter Notebook](https://nbviewer.jupyter.org/github/evertonjlima/Kaggle/blob/master/Digit-Recognizer/digit-recognizer.ipynb) |
+| Digit Recognition  | Feature Engineering, and KNN.       | Soon |
 

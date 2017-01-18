@@ -3,7 +3,8 @@ output: html_document
 ---
 Notebook prepared by [Everton Lima](https://github.com/evertonjlima)
 
-# Introduction to Statistical Learning Exercise Solutions Chapter 4
+# Introduction to Statistical Learning Solutions (ISLR)
+## Ch 4 Exercises
 ## Table of Contents
 
 ### Conceptual Exercises
@@ -62,7 +63,7 @@ $= -\frac{1}{2\sigma^2}(x^2-2x\mu_k+\mu_k^2) + log(\pi_k)+log(\frac{1}{\sqrt{2\p
 
 $= x\cdot\frac{\mu_k}{\sigma^2}+\frac{\mu_k^2}{2\sigma^2} + log(\pi_k)-\frac{x^2}{2\sigma^2}+log(\frac{1}{\sqrt{2\pi\sigma}})-K$
 
-Where since the Bayes classifier assigns an observation to the class which $p_k(x)$ is maximized, it assignts to class j if $p_j(x) > p_i(x)$ for all $i\neq j$. 
+Where since the Bayes classifier assigns an observation to the class which $p_k(x)$ is maximized, it assigns to class j if $p_j(x) > p_i(x)$ for all $i\neq j$. 
 
 $p_j(x) > p_i(x) = log(p_j(x)) > log(p_i(x))$ for all $i\neq j$
 
@@ -71,13 +72,13 @@ $x\cdot\frac{\mu_j}{\sigma^2}+\frac{\mu_j^2}{2\sigma^2} + log(\pi_j)-\frac{x^2}{
 
 $x\cdot\frac{\mu_j}{\sigma^2}+\frac{\mu_j^2}{2\sigma^2} + log(\pi_j)> x\cdot\frac{\mu_i}{\sigma^2}+\frac{\mu_i^2}{2\sigma^2} + log(\pi_i)$ for all $i\neq j$ since $\sigma_1 = \sigma_2 = ... = \sigma_n$
 
-Thus the Bayes classifier assigns an obsevation to the discriminant function which is maximized.
+Thus the Bayes classifier assigns an observation to the discriminant function which is maximized.
 
 $\sigma_k  = x\cdot\frac{\mu_k}{\sigma^2} -\frac{\mu_k^2}{2\sigma^2} + log(\pi_k)$
 
 ### 3<a name="3"></a>
 
-In the previous problem the quadradic term $\frac{x^2}{2\sigma^2}$ can be eliminated since LDA assumes $\sigma = \sigma_1 = \sigma_2 = ... = \sigma_n$. On the other hand, QDA makes no such assumption.
+In the previous problem the quadratic term $\frac{x^2}{2\sigma^2}$ can be eliminated since LDA assumes $\sigma = \sigma_1 = \sigma_2 = ... = \sigma_n$. On the other hand, QDA makes no such assumption.
 
 Following the steps in the previous question yields
 

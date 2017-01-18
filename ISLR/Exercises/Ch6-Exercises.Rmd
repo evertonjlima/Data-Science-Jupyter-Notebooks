@@ -4,7 +4,8 @@
   
 Notebook prepared by [Everton Lima](https://github.com/evertonjlima)
  
-# Introduction to Statistical Learning Exercise Solutions Chapter 6
+# Introduction to Statistical Learning Solutions (ISLR)
+## Ch 6 Exercises
 ## Table of Contents
 
 ### Conceptual Exercises
