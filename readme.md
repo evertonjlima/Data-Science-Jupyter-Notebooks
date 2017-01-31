@@ -9,10 +9,9 @@ This repo is a collection of notebooks (r markdown, and jupyter) related to data
    * [Solutions](#Solutions)
 
 
-## Exercises and Notes on Books
+## Solutions 
 ### Introduction to Statistical Learning
 
-### Solutions
 Solutions to both conceptual and applied exercises of the [ISLR](http://www-bcf.usc.edu/~gareth/ISL/index.html) book. 
 
 |Chapter No. |                                                                               Exercises                                            |  
@@ -28,7 +27,6 @@ Solutions to both conceptual and applied exercises of the [ISLR](http://www-bcf.
 |10          | [View Document](http://rpubs.com/evertonjlima/245990) |
 
 ## Kaggle Challenges
-
 
 | Challenge          | Description                                          | Notebook  |
 |--------------------|------------------------------------------------------|-----------|
