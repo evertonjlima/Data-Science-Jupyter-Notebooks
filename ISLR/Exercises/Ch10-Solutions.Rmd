@@ -1,0 +1,496 @@
+---
+  output: html_document
+---
+
+Notebook prepared by [Everton Lima](https://github.com/evertonjlima)
+ 
+# Introduction to Statistical Learning Solutions (ISLR)
+## Ch 10 Exercises
+## Table of Contents
+
+### Conceptual Exercises
+- [1](#1)
+- [2](#2)
+- [3](#3)
+- [4](#4)
+- [5](#5)
+- [6](#6)
+
+### Applied Exercises
+- [4](#4)
+- [5](#5)
+- [6](#6) 
+- [7](#7)
+- [8](#8)
+
+## Conceptual Exercises
+
+### 1<a name="1"></a>
+#### 1a<a name="1a"></a>
+
+$$ \frac{1}{|C_k|}\sum_{i,i' \in C_k}\sum_{j=1}^p (x_{ij}-x_{i'j})^2 = 
+        2 \sum_{i \in C_k}\sum_{j=1}^p (x_{ij}-\bar{x}_{kj})^2, (10.12)  $$
+        
+Starting from the left side of the equation we have,
+
+$$  \frac{1}{|C_k|}\sum_{i,i' \in C_k}\sum_{j=1}^p (x_{ij}-x_{i'j})^2 = 
+    \frac{1}{|C_k|}\sum_{i' \in C_k}\sum_{j=1}^p (x_{1j}-x_{i'j})^2 + 
+    \frac{1}{|C_k|}\sum_{i' \in C_k}\sum_{j=1}^p (x_{2j}-x_{i'j})^2 + ...$$
+    
+selecting a single term of the summation and expanding it further yields the following,
+
+$$ \frac{1}{|C_k|}\sum_{i' \in C_k,i'\neq i}\sum_{j=1}^p (x_{ij}-x_{i'j})^2 
+   = \frac{1}{|C_k|}\sum_{i' \in C_k,i'\neq i}\sum_{j=1}^p ((x_{ij}-\bar{x}_j)-(x_{i'j}-\bar{x_j}))^2 $$
+   
+$$=\frac{1}{|C_k|}\sum_{i' \in C_k,i'\neq i}\sum_{j=1}^p ((x_{ij}-\bar{x}_j)^2-2(x_{ij}-\bar{x}_j)(x_{i'j}-\bar{x_j})+(x_{i'j}-\bar{x_j})^2) $$
+
+$$=\frac{1}{|C_k|}\sum_{i \in C_k}\sum_{j=1}^p (x_{ij}-\bar{x}_j)^2
+-\frac{2}{|C_k|}\sum_{i' \in C_k,i'\neq i}\sum_{j=1}^p(x_{ij}-\bar{x}_j)(x_{i'j}-\bar{x_j}) 
++\frac{1}{|C_k|}\sum_{i' \in C_k}\sum_{j=1}^p(x_{i'j}-\bar{x_j})^2$$
+
+$$=\frac{2}{|C_k|}\sum_{i \in C_k}\sum_{j=1}^p (x_{ij}-\bar{x}_j)^2
+-\frac{2}{|C_k|}\sum_{i' \in C_k,i'\neq i}\sum_{j=1}^p(x_{ij}-\bar{x}_j)(x_{i'j}-\bar{x_j}) $$
+
+returning to the expression and substituting each term produces,
+$$=2\frac{|C_k|}{|C_k|}\sum_{i \in C_k}\sum_{j=1}^p (x_{ij}-\bar{x}_j)^2
+-\frac{2}{|C_k|}\sum_{i' \in C_k,i'\neq i}\sum_{j=1}^p(x_{1j}-\bar{x}_j)(x_{i'j}-\bar{x_j})
+-\frac{2}{|C_k|}\sum_{i' \in C_k,i'\neq i}\sum_{j=1}^p(x_{2j}-\bar{x}_j)(x_{i'j}-\bar{x_j})+...$$
+$$=2\sum_{i \in C_k}\sum_{j=1}^p (x_{ij}-\bar{x}_j)^2$$
+
+Note that,
+
+$$\frac{2}{|C_k|}\sum_{i' \in C_k,i'\neq i}\sum_{j=1}^p(x_{1j}-\bar{x}_j)(x_{i'j}-\bar{x_j})
+\frac{2}{|C_k|}\sum_{i' \in C_k,i'\neq i}\sum_{j=1}^p(x_{2j}-\bar{x}_j)(x_{i'j}-\bar{x_j})+...=0
+$$
+
+because,
+$$\sum_{i' in C_k}x_{i'j}-|C_k| \bar{x_j}=0$$
+
+#### 1b<a name="1b"></a>
+At each iteration observations are re-assigned to their closest cluster, mini zing the Euclidean distance.
+
+### 2<a name="2"></a>
+
+### 2a<a name="2a"></a>
+
+```{r}
+require(knitr)
+DissMatrix=data.frame(c(0,0.3,0.4,0.7),c(0.3,0,0.5,0.8),c(0.4,0.5,0,0.45),c(0.7,0.8,0.45,0))
+colnames(DissMatrix)=c(paste('Col',1:4))
+
+kable(DissMatrix)
+plot(hclust(dist(DissMatrix)),xlab='')
+```
+
+The table gives the dissimilarity between classes, meaning that in order to produce clusters we need only select pairs whose values are small. The smallest value in the table is for the entries (1,2) and (2,1), followed by the pair (3,4),(4,3).
+
+### 2b<a name="2b"></a>
+```{r}
+plot(hclust(dist(DissMatrix),method='single'),xlab='')
+```
+
+### 2c<a name="2c"></a>
+If we cut the first dendogram obtain at the value of 0.7, then we obtain the clusters (1,2) and (3,4). Cutting below this value produces 3 clusters since the observations 3 and 4 are in their own cluster.
+
+### 2d<a name="2d"></a>
+The clusters obtained here are (4) and (1,2,3). 
+
+### 2e<a name="2e"></a>
+
+A dendogram is read bottom up, where the height indicates where clusters are fused. Thus there is no horizontal meaning, the leafs are be swapped but they still represent clusters that are fused at the same height.
+
+```{r}
+row.names(DissMatrix)=c(2,1,4,3)
+plot(hclust(dist(DissMatrix)))
+```
+
+### 3<a name="3"></a>
+```{r}
+tb=data.frame(c(1,1,0,5,6,4),c(4,3,4,1,2,0))
+colnames(tb)=c('X1','X2')
+rownames(tb)=1:6
+
+kable(tb,row.names = T)
+```
+
+#### 3a<a name="3a"></a>
+```{r}
+plot(tb,col=rainbow(6))
+```
+
+#### 3b<a name="3b"></a>
+```{r}
+set.seed(42)
+labels=sample(1:6,6)
+tb=cbind(tb,labels)
+
+kable(tb)
+```
+
+#### 3c<a name="3c"></a>
+```{r}
+centroids=aggregate(.~labels,tb,mean)
+colnames(centroids)=c('labels',paste('C.X',1:2))
+
+kable(data.frame(tb[,-3],centroids[tb$labels,-1],labels=tb$labels))
+```
+
+#### 3d<a name="3d"></a>
+```{r}
+EuclideanDistance=function(v,z){
+  sqrt(sum( (v-z)^2 ))
+}
+
+labels=apply(tb[,c(1,2)],1,
+ function(x){
+    dist=apply(centroids[tb$labels,c(2,3)],1,function(y){ EuclideanDistance(x,y) })
+    which.min(dist[dist>0])
+  }
+ )
+
+kable(data.frame(tb[,-3],centroids[tb$labels,-1],old.labels=tb$labels,new.labels=labels))
+plot(tb[,c(1,2)],col=rainbow(6)[labels])
+```
+
+#### 3e<a name="3e"></a>
+```{r}
+
+while( any(labels != tb$labels)){
+  tb$labels=labels
+  centroids=aggregate(.~labels,tb,mean)
+
+  labels=apply(tb[,c(1,2)],1,
+    function(x){
+      dist=apply(centroids[tb$labels,c(2,3)],1,function(y){ EuclideanDistance(x,y) })
+      which.min(dist[dist>0])
+    }
+   )
+  }
+```
+
+#### 3f<a name="3f"></a>
+```{r}
+plot(tb[,c(1,2)],col=rainbow(6)[tb$labels])
+```
+
+### 4<a name="4"></a>
+#### 4a<a name="4a"></a>
+
+Single and complete linkage use the minimal, and maximal distance respectively. Thus there are two possibilities either,
+
+$$ D^{\{1,2,3\},\{4,5\}}_{min} < D^{\{1,2,3\},\{4,5\}}_{max}  $$
+
+or,
+
+$$ D^{\{1,2,3\},\{4,5\}}_{min} = D^{\{1,2,3\},\{4,5\}}_{max}  $$
+
+where,
+$$ D^{\{1,2,3\},\{4,5\}}_{min} = min(d_{14},d_{15},d_{24},d_{25},d_{34},d_{35})$$
+
+and,
+
+$$ D^{\{1,2,3\},\{4,5\}}_{max} = max(d_{14},d_{15},d_{24},d_{25},d_{34},d_{35})$$
+
+but if $D^{\{1,2,3\},\{4,5\}}_{min} = D^{\{1,2,3\},\{4,5\}}_{max}$ then the points are equidistant. This implies that there would be a single cluster of {1,2,3,4,5} instead of the two separate clusters.
+
+Thus $$ D^{\{1,2,3\},\{4,5\}}_{min} < D^{\{1,2,3\},\{4,5\}}_{max}  $$ is true. Consequently the clusters will fuse at a lower height in the single linkage dendogram.
+
+#### 4b<a name="4b"></a>
+
+
+Similarly to the previous problems, either,
+
+$$ D^{\{5\},\{6\}}_{min} < D^{\{5\},\{6\}}_{max}  $$
+
+or
+
+$$ D^{\{5\},\{6\}}_{min} = D^{\{5\},\{6\}}_{max}  $$
+
+but in this case there isn't enough information to determine when the clusters will fuse. Both possibilities are possible since the points can be equidistant.
+
+### 5<a name="5"></a>
+
+```{r}
+left=data.frame(socks=c(8,11,7,6,5,6,7,8),
+                computers=c(0,0,0,0,1,1,1,1),
+                col=c('black','tan','lightblue','green','yellow','darkblue','red','pink'))
+
+par(mfrow=c(1,2))
+barplot(left$socks,col=as.character(left$col),xlab = 'Socks',width = rep(0.4,8),xlim = c(0,8))
+barplot(left$computers,col=as.character(left$col),xlab = 'Computers',width = rep(0.2,8),xlim = c(0,8),ylim=c(0,11),yaxt='n')
+```
+
+```{r}
+set.seed(42)
+Ks=sample(c(rep(1,4),rep(2,4)),8) # step 1 - randomly assign clusters
+left=data.frame(left,cluster=Ks)
+left
+```
+
+```{r}
+Kmeans=aggregate(left[,c(1,2,4)],list(Ks),mean) # step 2 - find the cluster means
+Kmeans=data.frame(Kmeans,col=apply(data.frame(split(left$col,left$cluster)),2,function(x){paste(x,collapse = ",")}))
+Kmeans
+```
+
+```{r}
+Ks=apply(left[,c(1,2)],1,function(x){  # step 3 - re-assign observations.
+  dists=c(dist(rbind(x,Kmeans[1,c(2,3)])),dist(rbind(x,Kmeans[2,c(2,3)])))
+  which.min(dists)
+})
+
+left$cluster=Ks
+left$cluster
+```
+
+```{r}
+Kmeans=aggregate(left[,c(1,2,4)],list(Ks),mean)   # repeat step 2 - find the cluster means
+col=sapply(split(left$col,left$cluster),function(x){paste(x,collapse = ",")})
+
+Kmeans=data.frame(Kmeans,col=col)
+Kmeans
+```
+
+```{r}
+Ks=apply(left[,c(1,2)],1,function(x){  # step 3 - re-assign observations.
+  dists=c(dist(rbind(x,Kmeans[1,c(2,3)])),dist(rbind(x,Kmeans[2,c(2,3)])))
+  which.min(dists)
+})
+
+any(Ks!=left$cluster)
+```
+
+Since there is no change, the algorithm ends.
+
+```{r}
+left$cluster=Ks
+left
+```
+
+
+For the remaining two problems the scaling makes it so there is a very high weight placed on Computers, both resulting in same the clusters;
+
+$$((black,tan,lightblue,green),(yellow,darkblue,red,pink))$$
+
+### 6<a name="6"></a>
+
+Skipped.
+
+## Applied Exercises
+
+### 7<a name="7"></a>
+
+Use ``cor`` and ``dist`` to calculate the correlation and distance of the observation as follows,
+
+```{r}
+USArrests.scaled=scale(USArrests)
+
+correlation=as.dist(1-cor(t(USArrests.scaled)))
+euclidean=dist(USArrests.scaled)^2
+```
+
+If the quantities are approximately proportional then $euclidean \approx K \cdot correlation$ for a constant K.
+
+```{r}
+summary(correlation/euclidean)
+summary(correlation-0.1339*euclidean)
+```
+
+If $K=0.1339$ then they are approximately equal, different only 0.05 on average.
+
+### 8<a name="8"></a>
+#### 8a<a name="8a"></a>
+
+```{r}
+pr.out=prcomp(USArrests.scaled)
+pr.var=pr.out$sdev^2
+pr.var/sum(pr.var)
+```
+
+#### 8b<a name="8b"></a>
+
+```{r}
+num=rowSums(apply(USArrests.scaled,1,function(x){ colSums(x %*% pr.out$rotation )^2  }))
+num
+
+denom=sum(rowSums(USArrests.scaled^2))
+denom
+
+num/denom
+```
+
+
+### 9<a name="9"></a>
+#### 9a<a name="9a"></a>
+
+```{r}
+hclust.out=hclust(dist(USArrests),method='complete')
+plot(hclust.out)
+```
+
+#### 9b<a name="9b"></a>
+
+```{r}
+hclust.cut=cutree(hclust.out,k = 3)
+hclust.cut=split(data.frame(names(hclust.cut),hclust.cut),as.factor(hclust.cut))
+hclust.cut
+```
+
+#### 9c<a name="9d"></a>
+
+```{r}
+hclust.out=hclust(dist(scale(USArrests)),method='complete')
+plot(hclust.out)
+```
+
+Scaling significantly reduces the range and spread of the height of the tree. Moreover, cutting at the same height produces different
+
+```{r}
+hclust.cut=cutree(hclust.out,k = 3)
+split(data.frame(names(hclust.cut),hclust.cut),as.factor(hclust.cut))
+```
+
+By looking a bit more deeply into the clusters we can see that cluster 2, which contains California and New York, are high Assault and Urban population clusters, together with a higher average value for Rape.
+
+```{r}
+aggregate(USArrests,list(hclust.cut=hclust.cut),mean)
+```
+
+### 10<a name="10"></a>
+#### 10a<a name="10a"></a>
+
+```{r}
+set.seed(42)
+data= matrix(sapply(1:3,function(x){ rnorm(20*50,mean = 10*sqrt(x))  }),ncol=50)    # 20 obs. in each class with 50 features.
+class=unlist(lapply(1:3,function(x){rep(x,20)}))
+```
+
+
+#### 10b<a name="10b"></a>
+```{r}
+pr.out=prcomp(data)
+plot(pr.out$x[,c(1,2)],col=class)
+```
+
+#### 10c<a name="10c"></a>
+```{r}
+set.seed(1)
+kmeans.out=kmeans(data,3)
+
+table(kmeans.out$cluster)
+table(class)
+```
+
+We can see that there is only one observation that is miss classified.
+
+
+```{r}
+plot(pr.out$x[,c(1,2)],col=kmeans.out$cluster)
+```
+
+#### 10d<a name="10d"></a>
+
+```{r}
+set.seed(1)
+kmeans.out=kmeans(data,2)
+
+table(kmeans.out$cluster)
+table(class)
+```
+
+K-means seem to find a single cluster that is the same as before. This can clearly be observed in the picture below as the red cluster closely matches the original green cluster.
+
+```{r}
+plot(pr.out$x[,c(1,2)],col=kmeans.out$cluster)
+```
+
+#### 10e<a name="10e"></a>
+
+```{r}
+set.seed(1)
+kmeans.out=kmeans(data,4)
+
+table(kmeans.out$cluster)
+table(class)
+```
+
+
+When using 4 clusters it becomes more difficult to determine the difference between the new found clusters and the actual class values. However, by examining the plot we can see that it again find the original green cluster with some overlap between it and the remaining ones. Overlap between clusters in the two principal components is also clear, as should be expected since they may be close in the remaining dimensions.
+
+```{r}
+plot(pr.out$x[,c(1,2)],col=kmeans.out$cluster)
+```
+
+#### 10f<a name="10f"></a>
+
+
+```{r}
+set.seed(1)
+kmeans.out=kmeans(pr.out$x[,c(1,2)],3)
+
+table(kmeans.out$cluster)
+table(class)
+```
+
+The algorithm performs well when clustering on the first two principal components, however, since it is missing information about the remaining dimensions observations that are close in the first two components are assigned to the same cluster which leads to mistakes. By examining the plot as before we can see that this is true, as there is no overlap.
+
+```{r}
+plot(pr.out$x[,c(1,2)],col=kmeans.out$cluster)
+```
+
+#### 10g<a name="10g"></a>
+
+```{r}
+set.seed(1)
+kmeans.out=kmeans(scale(data,center = T,scale = T),3)
+
+table(kmeans.out$cluster)
+table(class)
+```
+
+```{r}
+plot(pr.out$x[,c(1,2)],col=kmeans.out$cluster)
+```
+
+There is significant overlap in the first two clusters, and the algorithm performs poorly.
+
+
+
+### 11<a name="11"></a>
+#### 11a<a name="11a"></a>
+
+Data can be read directly from the website by using the function ``fread`` from the library ``data.table``.
+``
+```{r}
+library(data.table)
+data=fread('http://www-bcf.usc.edu/~gareth/ISL/Ch10Ex11.csv')
+```
+
+#### 11b<a name="11b"></a>
+
+```{r}
+single.out=hclust(as.dist(1-cor(data)),method='single')
+plot(single.out)
+```
+
+```{r}
+complete.out=hclust(as.dist(1-cor(data)),method = 'complete')
+plot(complete.out)
+
+```
+
+
+It is very clear that single linkage gives poor results. Using single linkage produces a very unbalanced dendogram with a single tree.
+
+#### 11c<a name="11c"></a>
+
+I would recommend to examine which observations contribute the most to the overall variance present in the data. One way to achieve this by examining the loading produced by PCA.
+
+```{r}
+pr.out=prcomp(t(data))
+head(order(abs(rowSums(pr.out$rotation)),decreasing = T))
+```
+
+
+
+

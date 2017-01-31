@@ -24,8 +24,8 @@ Solutions to both conceptual and applied exercises of the [ISLR](http://www-bcf.
 |6           | [View Document](http://rpubs.com/evertonjlima/242626) |
 |7           | [View Document](http://rpubs.com/evertonjlima/242631) |
 |8           | [View Document](http://rpubs.com/evertonjlima/242633) |
-|9           | [View Document](http://rpubs.com/evertonjlima/242633) |
-|10          | Soon |
+|9           | [View Document](http://rpubs.com/evertonjlima/242636) |
+|10          | [View Document](http://rpubs.com/evertonjlima/245990) |
 
 ## Kaggle Challenges
 
