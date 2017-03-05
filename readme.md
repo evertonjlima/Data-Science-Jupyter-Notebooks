@@ -30,6 +30,5 @@ Solutions to both conceptual and applied exercises of the [ISLR](http://www-bcf.
 
 | Challenge          | Description                                          | Link      |
 |--------------------|------------------------------------------------------|-----------|
-| Predicting Relevance of Search Results on HomeDepot.com  |       | [View (PDF)](Kaggle/
-Notebooks/Kaggle/Home Depot/report/Home_Depot_Report.pdf) |
+| Predicting Relevance of Search Results on HomeDepot.com  |       | [View (PDF)](https://github.com/evertonjlima/Notebooks/blob/master/Kaggle/Home%20Depot/report/Home_Depot_Report.pdf) |
 
