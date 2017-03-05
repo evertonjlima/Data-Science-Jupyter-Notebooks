@@ -28,7 +28,8 @@ Solutions to both conceptual and applied exercises of the [ISLR](http://www-bcf.
 
 ## Kaggle Challenges
 
-| Challenge          | Description                                          | Notebook  |
+| Challenge          | Description                                          | Link      |
 |--------------------|------------------------------------------------------|-----------|
-| Digit Recognition  | Feature Engineering, and KNN.       | Soon |
+| Predicting Relevance of Search Results on HomeDepot.com  |       | [View (PDF)](Kaggle/
+Notebooks/Kaggle/Home Depot/report/Home_Depot_Report.pdf) |
 
