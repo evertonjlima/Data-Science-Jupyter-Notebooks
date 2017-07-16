@@ -26,9 +26,3 @@ Solutions to both conceptual and applied exercises of the [ISLR](http://www-bcf.
 |9           | [View Document](http://rpubs.com/evertonjlima/242636) |
 |10          | [View Document](http://rpubs.com/evertonjlima/245990) |
 
-## Kaggle Challenges
-
-| Challenge          | Description                                          | Link      |
-|--------------------|------------------------------------------------------|-----------|
-| Predicting Relevance of Search Results on HomeDepot.com  | Word2Vec,TfIdf features. [Short presentation](https://drive.google.com/open?id=1obzSq2aBudj66cCeJhBkkXkuJ-FUR1MPpqbpQQRhYiI)      | [View (PDF)](https://github.com/evertonjlima/Notebooks/blob/master/Kaggle/Home%20Depot/report/Home_Depot_Report.pdf) |
-
