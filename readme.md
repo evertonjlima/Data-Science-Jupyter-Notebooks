@@ -3,11 +3,12 @@
 This repo is a collection of notebooks (r markdown, and jupyter) related to data science. See [index](#index) section for list of content. 
 
 ## Index
-* [Kaggle Challenges](#kaggle-challenges)
-* [Exercises and Notes on Books](#exercises-and-notes-on-books)
- * [Introduction to Statistical Learning](#introduction-to-statistical-learning)
-   * [Solutions](#Solutions)
 
+* [Kaggle Challenges](#kaggle-challenges)
+
+* [Book Solutions](#Solutions)
+   - [Introduction to Statistical Learning](#introduction-to-statistical-learning)
+ 
 
 ## Solutions 
 ### Introduction to Statistical Learning
